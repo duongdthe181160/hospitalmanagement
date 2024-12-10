@@ -1,0 +1,234 @@
+﻿@using BELibrary.Core.Utils
+@using BELibrary.Entity
+@using PagedList.Mvc
+@using HospitalManagement.Areas.Admin.Authorization
+@model PagedList.IPagedList<Article>
+
+@{
+    var user = CookiesManage.GetUser();
+
+    ViewBag.Title = "Search";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.FullPage = true;
+
+    var query = ViewBag.QueryData ?? "";
+}
+<!---------------------------------->
+@section CSS {
+    <style>
+
+        .autocomplete-suggestions {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            border: 1px solid #999;
+            background: #FFF;
+            cursor: default;
+            overflow: auto;
+            -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+            -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+            box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+        }
+
+        .autocomplete-suggestion {
+            padding: 2px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .autocomplete-no-suggestion {
+            padding: 2px 5px;
+        }
+
+        .autocomplete-selected {
+            background: #F0F0F0;
+        }
+
+        .autocomplete-suggestions strong {
+            font-weight: bold;
+            color: #000;
+        }
+
+        .autocomplete-group {
+            padding: 2px 5px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #000;
+            display: block;
+            border-bottom: 1px solid #000;
+        }
+
+        .regimen-header {
+            display: flex;
+            -o-justify-content: space-between;
+            -webkit-justify-content: space-between;
+            justify-content: space-between;
+            -ms-align-items: center;
+            -o-align-items: center;
+            -webkit-align-items: center;
+            align-items: center
+        }
+
+        .regimen-description {
+            padding-left: 30px;
+        }
+
+            .regimen-description h3 {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-size: 15px;
+                font: inherit;
+                vertical-align: baseline;
+            }
+    </style>
+}
+
+<div id="page-head">
+
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Trang tìm kiếm</h1>
+    </div>
+    <hr class="bord-no">
+    <div class="row pad-ver">
+        <form action="/admin/article/search" method="get" class="col-xs-12 col-sm-10 col-sm-offset-1 pad-hor">
+            <div class="input-group mar-btm">
+
+                <input type="text" name="query" class="form-control input-lg" value="@query" id="autocomplete-ajax" style="position: absolute; z-index: 2;" />
+                <input type="text" class="form-control input-lg" id="autocomplete-ajax-x" disabled="disabled" style="color: #CCC; position: absolute; background: transparent; z-index: 1;" />
+                <span class="input-group-btn">
+                    <button class="btn btn-primary btn-lg" type="submit">Tìm kiếm</button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="page-content">
+
+    <div class="panel">
+        <div class="panel-body">
+            <div class="pad-hor mar-top">
+                <h2 class="text-thin mar-no">
+                    @(ViewBag.Total ?? 0)  kết quả
+
+                    @if (!string.IsNullOrEmpty(query))
+                    {
+                        <span>tìm thấy cho:</span> <i class="text-info text-normal">"@query"</i>
+                    }
+                </h2>
+                <small>Thời gian:  ( @(ViewBag.RequestTime ?? 0) Giây)</small>
+            </div>
+
+            <hr>
+
+            <ul class="list-group bord-no">
+
+                @foreach (var item in Model)
+                {
+                    <li class="list-group-item list-item-lg bord-btm" style="border-bottom: 1px solid rgba(0,0,0,0.07);">
+                        <div class="media-heading mar-no regimen-header">
+                            <a class="btn-link text-lg text-semibold" onclick="openRecord('@item.Id')" href="javascript:void(0)">@item.Title</a>
+                            <div class="control-regimen">
+                                <button class="btn btn-info btn-sm btn-icon  add-tooltip" data-original-title="Xem chi tiết" data-container="body" onclick="openRecord('@item.Id')">
+                                    <i class="fa fa-calendar  icon-lg"></i>
+                                </button>
+                                @if (user != null && user.Role == RoleKey.Admin)
+                                {
+                                    <button class="btn btn-info btn-sm btn-icon add-tooltip" data-original-title="Chỉnh sửa" data-container="body" title="Sửa bệnh án" onclick="openEditing('@item.Id')">
+                                        <i class="demo-psi-pen-5 icon-lg"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm btn-icon add-tooltip" data-original-title="Xóa" data-container="body"
+                                            onclick="deleteElement('@item.Id','@item.Title')">
+                                        <i class="demo-psi-recycling icon-lg"></i>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="regimen-description" style="padding-top: 10px">
+                            <p class="text-sm ">
+                                @item.Description
+                            </p>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <!--Pagination-->
+            <div class="text-center">
+                @Html.PagedListPager(Model, page => "/admin/" + "regimen/search" + "?query=" + query + "&page=" + page)
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/Areas/Admin/Content/plugins/autocomplete/jquery.autocomplete.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            notify.done();
+            $('#autocomplete-ajax').autocomplete({
+                serviceUrl: '/admin/article/GetJson',
+
+                lookupFilter: function (suggestion, originalQuery, queryLowerCase) {
+                    var re = new RegExp('\\b' + $.Autocomplete.utils.escapeRegExChars(queryLowerCase), 'gi');
+                    return re.test(suggestion.value);
+                },
+                onSelect: function (suggestion) {
+                    openRecord(suggestion.data);
+                },
+                onHint: function (hint) {
+                    $('#autocomplete-ajax-x').val(hint);
+                },
+                onInvalidateSelection: function () {
+                    $('#selction-ajax').html('You selected: none');
+                }
+            });
+
+        });
+
+        const baseUrl = "/admin/article";
+
+        //Edit
+        function openEditing(id) {
+            notify.loading();
+            window.location.href = `${baseUrl}/update?id=${id}`;
+            notify.done();
+        }
+        //Edit
+        function openRecord(id) {
+            notify.loading();
+            window.location.href = `${baseUrl}/detail?id=${id}`;
+            notify.done();
+        }
+
+        //Del
+        function deleteElement(_id, name) {
+            var mess = 'Xác nhận <b>xóa</b> bản ghi <b>' + name + '</b>';
+            bootbox.confirm(mess, function (result) {
+                if (result) {
+                    ajax.del(`${baseUrl}/del`,
+                        { id: _id },
+                        (response) => {
+                            if (response.status) {
+                                notify.push(response.mess, notify.EType.SUCCESS);
+                                $(`#row_${_id}`).remove();
+                            } else {
+                                notify.push(mess, notify.EType.DANGER);
+                            }
+                        },
+                        (jqXHR, textStatus) => {
+                            const mess = `Request failed: ${textStatus}`;
+                            notify.push(mess, notify.EType.DANGER);
+
+                        }
+                    );
+                }
+            });
+        }
+    </script>
+
+}

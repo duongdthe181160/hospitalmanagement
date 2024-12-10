@@ -1,0 +1,78 @@
+﻿@using HospitalManagement.Handler
+@{
+    ViewBag.Title = "Đăng nhập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var url = ViewBag.ReturnUrl;
+}
+
+@section CSS {
+    <link href="~/Content/plugin/notifyjs/lobibox.min.css" rel="stylesheet" />
+}
+<!-- Start main-content -->
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+
+                <div class="account-content">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-md-7 col-lg-6 login-left">
+                            <img src="~/Content/theme/img/login-banner.png" class="img-fluid" alt="Doccure Login">
+                        </div>
+                        <div class="col-md-12 col-lg-6 login-right">
+                            <div class="login-header">
+                                <h3>Login <span>Healthcare</span></h3>
+                            </div>
+                            <form name="login-form" class="clearfix" id="frmLogin" autocomplete="off">
+                                <div class="form-group form-focus">
+                                    <input type="text" id="Username" autocomplete="false" class="form-control floating">
+                                    <label class="focus-label">Username</label>
+                                </div>
+                                <div class="form-group form-focus">
+                                    <input type="password" id="Password" autocomplete="false" class="form-control floating">
+                                    <label class="focus-label">Password</label>
+                                </div>
+                                <div class="text-right">
+                                    <a class="forgot-link" href="#" id="demo-bootbox-bounce">Forgot Password ?</a>
+                                </div>
+                                <button class="btn btn-primary btn-block btn-lg login-btn" id="btnLogin" type="submit">Login</button>
+                                <div class="login-or">
+                                    <span class="or-line"></span>
+                                    <span class="span-or">or</span>
+                                </div>
+                                <div class="row form-row social-login">
+                                    <div class="col-6">
+                                        <a href="#" class="btn btn-facebook btn-block disabled"><i class="fab fa-facebook-f mr-1"></i> Login</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="#" class="btn btn-google btn-block disabled"><i class="fab fa-google mr-1"></i> Login</a>
+                                    </div>
+                                </div>
+                                <div class="text-center dont-have">Don’t have an account? <a href="/account/register">Register</a></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end main-content -->
+@section Scripts {
+    <script src="~/Scripts/js/live/login.client.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $('#demo-bootbox-bounce').on('click', function () {
+                Lobibox.alert("success", {
+                    msg: `<p class='text-semibold text-main'>Cảm ơn</p><p>Để lấy lại mật khẩu vui lòng liên hệ nhân viên bệnh viện để được cấp lại mật khẩu mới.</p>`
+
+                });
+            });
+        });
+    </script>
+
+
+}

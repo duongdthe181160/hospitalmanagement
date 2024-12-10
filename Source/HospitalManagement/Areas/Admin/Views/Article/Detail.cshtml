@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.HasHead = false;
+    var user = CookiesManage.GetUser();
+}
+
+@using BELibrary.Core.Utils
+@using HospitalManagement.Areas.Admin.Authorization
+@model BELibrary.Entity.Article
+
+<!---------------------------------->
+@section CSS {
+    <style>
+    </style>
+}
+
+<div class="panel blog blog-details">
+    <div class="panel-body">
+        <div class="blog-title media-block">
+            <div class="media-right textright">
+
+                <a href="javascript:void(0)" onclick="window.history.back();" class="btn btn-icon demo-psi-arrow-left-2 icon-lg add-tooltip" data-original-title="Trở lại" data-container="body"></a>
+
+                @if (user != null && user.Role == RoleKey.Admin)
+                {
+                    <span>|</span>
+                    <a href="/admin/article/update?id=@Model.Id" class="btn btn-icon demo-psi-pen-5 icon-lg add-tooltip" data-original-title="Sửa" data-container="body"></a>
+                }
+            </div>
+            <div class="media-body">
+                <a href="#" class="btn-link">
+                    <h1>@Model.Title</h1>
+                </a>
+                <p>By <a href="#" class="btn-link">@Model.ModifiedBy</a></p>
+            </div>
+            <hr />
+        </div>
+        <div class="blog-content" style="padding-left: 20px;">
+            @Html.Raw(Model.Content)
+        </div>
+        <div class="blog-footer" style="padding-left: 20px;">
+            <div class="media-left">
+                <span class="label label-success">@Model.ModifiedDate.ToString("dd/MM/yyyy HH:mm")</span>
+                <small>Posted by : <a href="#" class="btn-link">@Model.ModifiedBy</a></small>
+            </div>
+            <div class="media-body text-right">
+            </div>
+        </div>
+    </div>
+</div>

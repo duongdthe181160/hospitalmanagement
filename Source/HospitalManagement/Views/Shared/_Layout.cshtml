@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Patient Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+    <link href="~/Content/theme/img/favicon.png" rel="icon">
+
+    <link rel="stylesheet" href="~/Content/theme/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="~/Content/theme/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/Content/theme/plugins/fontawesome/css/all.min.css">
+
+    <link href="~/Content/alertify/alertify.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/Content/theme/css/style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
+
+    <link href="~/Content/plugin/notifyjs/lobibox.min.css" rel="stylesheet" />
+    @RenderSection("CSS", required: false)
+    <!--[if lt IE 9]>
+                <script src="~/Content/theme/js/html5shiv.min.js"></script>
+                <script src="~/Content/theme/js/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+
+        .Scroll-up {
+            font-size: 30px;
+            color: #03a9f4;
+            background-color: #f8f8f8;
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            border-radius: 50px;
+            position: fixed;
+            right: 20px;
+            bottom: 10px;
+            z-index: 9999;
+            cursor: pointer;
+            border: 2px solid #03a9f4;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <!-- Header -->
+        @Html.Partial("_PartialHeader")
+
+        <!-- Start main-content -->
+
+        @RenderBody()
+
+        <div class="clearfix"></div>
+        <!-- Footer -->
+        @Html.Partial("_PartialFooter")
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">New booking</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title="" title=""><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="booking-doc-info">
+                                <a href="" class="booking-doc-img link-to-detail-doctor">
+                                    <img src="" id="ImgAvt" alt="User Image">
+                                </a>
+                                <div class="booking-info">
+                                    <h4><a href="" class="link-to-detail-doctor" id="doctor-name">Dr. Darren Elder</a></h4>
+                                    <div class="rating">
+                                        <i class="fas fa-star filled"></i>
+                                        <i class="fas fa-star filled"></i>
+                                        <i class="fas fa-star filled"></i>
+                                        <i class="fas fa-star filled"></i>
+                                        <i class="fas fa-star"></i>
+                                        <span class="d-inline-block average-rating">35</span>
+                                    </div>
+                                    <p class="text-muted mb-0"><i class="fas fa-map-marker-alt"></i> <span id="doctor-address"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="form-book-doctor">
+                        <div class="form-group">
+                            <input type="hidden" value="" id="doctor-id" name="doctorId" />
+                            <label class="col-form-label">Thời gian:</label>
+                            <input class="form-control" name="time" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" data-original-title="" title="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title="" title="">Close</button>
+                    <button class="btn btn-primary" type="button" data-original-title="" onclick="saveBooking()" title="">Đăng ký ngay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Start Button Scroll UP -->
+    <div class="Scroll-up">
+        <i class="fa fa-stethoscope" aria-hidden="true"></i>
+    </div>
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+    <script src="~/Content/theme/js/jquery.min.js"></script>
+
+    <script src="~/Content/theme/js/popper.min.js"></script>
+    <script src="~/Content/theme/js/bootstrap.min.js"></script>
+
+    <script src="~/Content/plugin/notifyjs/lobibox.min.js"></script>
+
+    <script src="~/Scripts/js/base/common.js"></script>
+
+    <script src="~/Areas/Admin/Content/js/base/ajax.js"></script>
+
+    <script src="~/Scripts/alertify.min.js"></script>
+    @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript">
+        var scrollButton = $(".Scroll-up");
+        $(window).on("scroll", function () {
+            if ($(this).scrollTop() >= 500) {
+                scrollButton.show();
+            } else {
+                scrollButton.hide();
+            }
+        });
+        scrollButton.on("click",
+            function () {
+                $("html,body").animate({
+                    scrollTop: 0
+                },
+                    1e3);
+            });
+
+        function getDataDoctor(doctorId) {
+
+            ajax.get(`/doctor/getJson`,
+                { id: doctorId },
+                (response) => {
+                    if (response.status) {
+                        const obj = response.data;
+                        if (obj) {
+                            $("#ImgAvt").attr("src", obj.Avatar);
+                            $(".link-to-detail-doctor").attr("href", `/doctor/detail?id=${obj.Id}`);
+                            $("#doctor-name").text(obj.Name);
+                            $("#doctor-id").val(obj.Id);
+                            $("#doctor-address").text(obj.Address);
+
+
+                            $("#exampleModal").modal('show');
+                        }
+                    }
+                },
+                (jqXhr, textStatus) => {
+                    const mess = `Request failed: ${textStatus}`;
+                    Lobibox.alert("error", {
+                        msg: "Vui lòng đăng nhập"
+                    });
+                }
+            );
+        }
+
+        function bookNow(doctorId) {
+            getDataDoctor(doctorId);
+        }
+
+        function saveBooking() {
+
+            var formData = new FormData(document.getElementById('form-book-doctor'));
+            ajax.createOrUpdate(`/doctor/book`,
+                formData,
+                (response) => {
+                    if (response.status) {
+                        Lobibox.alert("success", {
+                            msg: response.mess
+                        });
+
+                    } else {
+                        Lobibox.alert("error", {
+                            msg: response.mess
+                        });
+                    }
+                },
+                (jqXhr, textStatus) => {
+                    const mess = `Request failed: ${textStatus}`;
+                    Lobibox.alert("error", {
+                        msg: mess
+                    });
+                }
+            );
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+﻿@using HospitalManagement.Handler
+@using BELibrary.Entity
+
+@{
+    ViewBag.Title = "Trang cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = CookiesManage.GetUser();
+}
+
+@model DetailRecord
+@{
+    ViewBag.Title = "Create";
+    var patient = (Patient)ViewBag.Patient ?? new Patient();
+    var record = (Record)ViewBag.Record ?? new Record();
+
+    var result = record.Result;
+    var note = record.Note;
+}
+
+@section CSS
+{
+
+    <style>
+        .fa {
+            margin-right: 10px;
+        }
+
+        .bg-black-333 {
+            background-color: darkseagreen;
+            margin-top: 10px;
+            padding-top: 10px;
+            padding-bottom: 32px;
+            color: white;
+        }
+
+        .full-name {
+            padding-top: 12px;
+            color: white;
+        }
+
+        .styled-icons li {
+            display: inline-block;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        .styled-icons.icon-sm a {
+            font-size: 13px;
+            height: 30px;
+            line-height: 30px;
+            margin: 2px 7px 2px 0;
+            width: 30px;
+        }
+
+        .styled-icons.icon-circled a {
+            border-radius: 50%;
+        }
+
+        .styled-icons.icon-gray a {
+            background-color: #eeeeee;
+            color: #555555;
+            display: block;
+            font-size: 18px;
+            height: 36px;
+            line-height: 36px;
+            width: 36px;
+        }
+
+        .mb-15 {
+            margin-bottom: 15px !important;
+        }
+
+        .mt-15 {
+            margin-top: 15px !important;
+        }
+
+        ul, ol {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .fa {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+}
+<!-- Start main-content -->
+<!-- Section: Doctor Details -->
+<section class="container">
+    <div class="breadcrumb-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-8 col-12">
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Account</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-body">
+            <div class="fixed-fluid" style="font-family: roboto;">
+                <div class="fixed-md-200 pull-sm-left fixed-right-border">
+                    <!-- Simple profile -->
+                    <div class="text-center">
+                        <div class="pad-ver">
+                            <img src="@(string.IsNullOrEmpty(patient.ImageProfile) ? "/Areas/Admin/Content/img/profile-photos/1.png" : patient.ImageProfile)" class="img-lg img-circle w-100" alt="Profile Picture">
+                        </div>
+                        <h4 class="text-lg text-overflow mar-no">@patient.FullName</h4>
+                        <p class="text-sm text-muted">@patient.Job</p>
+
+                        <a class="btn btn-block btn-success btn-lg disable" href="#">Sửa thông tin</a>
+                    </div>
+                    <hr>
+
+                    <!-- Profile Details -->
+                    <p class="pad-ver text-main text-sm text-uppercase text-bold">Thông tin</p>
+                    <p><i class="fa fa-code icon-lg icon-fw"></i> <label class="label label-success" style="font-size: 12px;">@patient.PatientCode</label> </p>
+                    <p><i class="fa fa-map-marker icon-lg icon-fw"></i> @patient.Address</p>
+                    <p><a href="#" class="btn-link"><i class="fa fa-tags icon-lg icon-fw"></i> @patient.DateOfBirth.ToString("dd/MM/yyyy")</a></p>
+                    <p><i class="fa fa-phone icon-lg icon-fw"></i> @patient.Phone</p>
+
+                    <div class="fixed-sm-300 pull-sm-right">
+                        <form id="form-record">
+                            <div class="panel">
+                                <div class="panel-body" style="padding: 0;">
+                                    <p class="text-main text-bold text-uppercase">Bác sĩ hội chuẩn</p>
+                                    <input type="hidden" value="@record.Id" name="Id" />
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <i class="fa fa-user-md"></i>
+                                                @if (record.Doctor != null)
+                                                {
+                                                    <span>@record.Doctor.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Chưa xác đinh</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-main text-bold text-uppercase">Kết quả</p>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextAreaFor(model => result, new { @class = "form-control", @rows = "10" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <p class="text-main text-sm text-uppercase text-bold">Ghi chú</p>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextAreaFor(model => note, new { @class = "form-control", @rows = "10" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="fluid">
+                    <div class="fixed-fluid">
+
+                        <div class="fluid">
+                            <div class="panel">
+
+                                <!--Panel body-->
+                                <div class="panel-body">
+
+                                    <div class="form-group text-center">
+                                        <h3> Bệnh án - Bệnh nhân: @patient.FullName</h3>
+                                    </div>
+                                    <div class="panel" style="border: 1px solid;">
+                                        <div class="panel-heading">
+                                            <div class="panel-control">
+                                                <ul class="pager">
+                                                    <li>
+                                                        <a href="javascript:void(0)" onclick="openRedirect(false, '@Model.RecordId')">Xem đơn thuốc</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- BASIC FORM ELEMENTS -->
+                                        <!--===================================================-->
+                                        <div class="panel-body form-horizontal form-padding">
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Tiêu đề:</label>
+                                                <div class="col-md-9">
+                                                    @Html.EditorFor(model => model.DiseaseName,
+                                                        new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "Eg: Thăm khám mắt 20/10/2021" } })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Kết quả:</label>
+                                                <div class="col-md-9">
+                                                    @Html.TextAreaFor(model => model.Result, new { @class = "form-control", @readonly = true, @rows = "4", @placeholder = "Chuẩn đoán lâm sàng", @maxlength = 1000 })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Ghi chú:</label>
+                                                <div class="col-md-9">
+                                                    @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @readonly = true, @rows = "4", @placeholder = "Chuẩn đoán lâm sàng", @maxlength = 1000 })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--===================================================-->
+                                        <!-- END BASIC FORM ELEMENTS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- end main-content -->
+@section Scripts {
+    <script>
+        function openRedirect(isFile, id) {
+            if (isFile) {
+                window.location.href = `/record/Attachment?detailRecordId=${id}`;
+            } else {
+                window.location.href = `/record/Prescription?detailRecordId=${id}`;
+            }
+        }
+    </script>
+}

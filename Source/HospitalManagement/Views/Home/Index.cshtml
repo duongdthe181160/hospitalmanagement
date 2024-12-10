@@ -1,0 +1,294 @@
+﻿@using BELibrary.Entity
+@{
+    var doctors = (List<Doctor>)ViewBag.Doctors ?? new List<Doctor>();
+    var latestPosts = (List<Article>)ViewBag.LatestPosts ?? new List<Article>();
+
+}
+
+<section class="section section-search">
+    <div class="container-fluid">
+        <div class="banner-wrapper">
+            <div class="banner-header text-center">
+                <h1>Search Doctor, Make an Appointment</h1>
+                <p>Discover the best doctors, clinic & hospital the city nearest to you.</p>
+            </div>
+            <div class="search-box">
+                <form action="/doctor/search" method="post">
+                    <div class="form-group search-info">
+                        <input type="text" class="form-control" placeholder="Search Doctors, Clinics, Hospitals, Diseases Etc" name="query">
+                        <span class="form-text">Ex : Dental or Sugar Check up etc</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary search-btn mt-0"><i class="fas fa-search"></i> <span>Search</span></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section home-tile-section">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9 m-auto">
+                <div class="section-header text-center">
+                    <h2>What are you looking for?</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 mb-3">
+                        <div class="card text-center doctor-book-card">
+                            <img src="~/Content/theme/img/doctors/doctor-07.jpg" alt="" class="img-fluid">
+                            <div class="doctor-book-card-content tile-card-content-1">
+                                <div>
+                                    <h3 class="card-title mb-0">Visit a Doctor</h3>
+                                    <a href="/doctor" class="btn book-btn1 px-3 py-2 mt-3" tabindex="0">Book Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-3">
+                        <div class="card text-center doctor-book-card">
+                            <img src="~/Content/theme/img/img-pharmacy1.jpg" alt="" class="img-fluid">
+                            <div class="doctor-book-card-content tile-card-content-1">
+                                <div>
+                                    <h3 class="card-title mb-0">Find a Pharmacy</h3>
+                                    <a href="/pharmacy" class="btn book-btn1 px-3 py-2 mt-3" tabindex="0">Find Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-3">
+                        <div class="card text-center doctor-book-card">
+                            <img src="~/Content/theme/img/lab-image.jpg" alt="" class="img-fluid">
+                            <div class="doctor-book-card-content tile-card-content-1">
+                                <div>
+                                    <h3 class="card-title mb-0">Find a Lab</h3>
+                                    <a href="javascript:void(0);" class="btn book-btn1 px-3 py-2 mt-3" tabindex="0">Coming Soon</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-specialities">
+    <div class="container-fluid">
+        <div class="section-header text-center">
+            <h2>Clinic and Specialities</h2>
+            <p class="sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+
+                <div class="specialities-slider slider">
+
+                    <div class="speicality-item text-center">
+                        <div class="speicality-img">
+                            <img src="~/Content/theme/img/specialities/specialities-01.png" class="img-fluid" alt="Speciality">
+                            <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                        </div>
+                        <p>Urology</p>
+                    </div>
+
+                    <div class="speicality-item text-center">
+                        <div class="speicality-img">
+                            <img src="~/Content/theme/img/specialities/specialities-02.png" class="img-fluid" alt="Speciality">
+                            <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                        </div>
+                        <p>Neurology</p>
+                    </div>
+
+                    <div class="speicality-item text-center">
+                        <div class="speicality-img">
+                            <img src="~/Content/theme/img/specialities/specialities-03.png" class="img-fluid" alt="Speciality">
+                            <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                        </div>
+                        <p>Orthopedic</p>
+                    </div>
+
+                    <div class="speicality-item text-center">
+                        <div class="speicality-img">
+                            <img src="~/Content/theme/img/specialities/specialities-04.png" class="img-fluid" alt="Speciality">
+                            <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                        </div>
+                        <p>Cardiologist</p>
+                    </div>
+
+                    <div class="speicality-item text-center">
+                        <div class="speicality-img">
+                            <img src="~/Content/theme/img/specialities/specialities-05.png" class="img-fluid" alt="Speciality">
+                            <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                        </div>
+                        <p>Dentist</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-doctor">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="section-header ">
+                    <h2>Book Our Doctor</h2>
+                    <p>Lorem Ipsum is simply dummy text </p>
+                </div>
+                <div class="about-content">
+                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.</p>
+                    <p>web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes</p>
+                    <a href="javascript:;">Read More..</a>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="doctor-slider slider">
+
+                    @foreach (var doctor in doctors)
+                    {
+                        <div class="profile-widget" style="min-height: 600px;">
+                            <div class="doc-img">
+                                <a href="/doctor/detail?id=@doctor.Id">
+                                    <img class="img-fluid" alt="User Image" src="@doctor.Avatar">
+                                </a>
+                                <a href="javascript:void(0)" class="fav-btn">
+                                    <i class="far fa-bookmark"></i>
+                                </a>
+                            </div>
+                            <div class="pro-content" style="min-height: 285px;">
+                                <h3 class="title">
+                                    <a href="/doctor/detail?id=@doctor.Id">@doctor.Name</a>
+                                    <i class="fas fa-check-circle verified"></i>
+                                </h3>
+                                <p class="speciality">@doctor.Descriptions</p>
+                                <div class="rating">
+                                    <i class="fas fa-star filled"></i>
+                                    <i class="fas fa-star filled"></i>
+                                    <i class="fas fa-star filled"></i>
+                                    <i class="fas fa-star filled"></i>
+                                    <i class="fas fa-star filled"></i>
+                                    <span class="d-inline-block average-rating">(17)</span>
+                                </div>
+                                <ul class="available-info">
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i> @doctor.Address
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-dashboard"></i> @doctor.Faculty.Name
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="control">
+                                <div class="row row-sm">
+                                    <div class="col-6">
+                                        <a href="/doctor/detail?id=@doctor.Id" class="btn view-btn">View Profile</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="javascript:void(0)" onclick="bookNow('@doctor.Id')" class="btn book-btn">Book Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-features">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-5 features-img">
+                <img src="~/Content/theme/img/features/feature.png" class="img-fluid" alt="Feature">
+            </div>
+            <div class="col-md-7">
+                <div class="section-header">
+                    <h2 class="mt-2">Availabe Features in Our Clinic</h2>
+                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </p>
+                </div>
+                <div class="features-slider slider">
+
+                    <div class="feature-item text-center">
+                        <img src="~/Content/theme/img/features/feature-01.jpg" class="img-fluid" alt="Feature">
+                        <p>Patient Ward</p>
+                    </div>
+
+                    <div class="feature-item text-center">
+                        <img src="~/Content/theme/img/features/feature-02.jpg" class="img-fluid" alt="Feature">
+                        <p>Test Room</p>
+                    </div>
+
+                    <div class="feature-item text-center">
+                        <img src="~/Content/theme/img/features/feature-03.jpg" class="img-fluid" alt="Feature">
+                        <p>ICU</p>
+                    </div>
+
+                    <div class="feature-item text-center">
+                        <img src="~/Content/theme/img/features/feature-04.jpg" class="img-fluid" alt="Feature">
+                        <p>Laboratory</p>
+                    </div>
+
+                    <div class="feature-item text-center">
+                        <img src="~/Content/theme/img/features/feature-05.jpg" class="img-fluid" alt="Feature">
+                        <p>Operation</p>
+                    </div>
+
+                    <div class="feature-item text-center">
+                        <img src="~/Content/theme/img/features/feature-06.jpg" class="img-fluid" alt="Feature">
+                        <p>Medical</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-blogs">
+    <div class="container-fluid">
+
+        <div class="section-header text-center">
+            <h2>Blogs and News</h2>
+            <p class="sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+
+        <div class="row blog-grid-row">
+
+            @foreach (var art in latestPosts)
+            {
+                <div class="col-md-6 col-lg-3 col-sm-12">
+
+                    <div class="blog grid-blog">
+                        <div class="blog-image">
+                            <a href="/article/detail?id=@art.Id"><img class="img-fluid" src="@art.Image" alt="@art.Title"></a>
+                        </div>
+                        <div class="blog-content">
+                            <ul class="entry-meta meta-item">
+                                <li>
+                                    <div class="post-author">
+                                        <a href="#">
+                                            <img src="~/Content/theme/img/doctors/doctor-thumb-01.jpg" alt="Post Author"> <span>Dr. Ruby Perrin</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li><i class="far fa-clock"></i> @art.CreatedDate.ToString("D")</li>
+                            </ul>
+                            <h3 class="blog-title"><a hhref="/article/detail?id=@art.Id">@art.Title</a></h3>
+                            <p class="mb-0">@art.Description</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="view-all text-center">
+            <a href="/article" class="btn btn-primary">View All</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script src="~/Content/theme/js/slick.js"></script>
+    <script src="~/Content/theme/js/script.js"></script>
+} 

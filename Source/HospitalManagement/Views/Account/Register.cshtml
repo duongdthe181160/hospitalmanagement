@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var url = ViewBag.ReturnUrl;
+}
+
+@section CSS {
+    <link href="~/Content/plugin/notifyjs/lobibox.min.css" rel="stylesheet" />
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+
+                <div class="account-content">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-md-7 col-lg-6 login-left">
+                            <img src="~/Content/theme/img/login-banner.png" class="img-fluid" alt="Doccure Register">
+                        </div>
+                        <div class="col-md-12 col-lg-6 login-right">
+                            <div class="login-header">
+                                <h3>Patient Register <a href="/admin/login">Are you a Doctor?</a></h3>
+                            </div>
+
+                            <form name="reg-form" class="register-form" method="post" id="frmReg">
+
+                                <div class="row">
+                                    <div class="form-group form-focus col-md-6">
+                                        <label for="form_name">Tên đầy đủ</label>
+                                        <input name="FullName" class="form-control" type="text" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="form_gender">Giới tính</label>
+                                        <select name="Gender" class="form-control" required>
+                                            <option value="" selected>---- Lựa chọn ----</option>
+                                            <option value="True">Nam</option>
+                                            <option value="False">Nữ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="form_choose_username">Tên đăng nhập</label>
+                                        <input id="form_choose_username" name="Username" class="form-control" type="text" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="form_chooseDateOfBirth">Ngày sinh</label>
+                                        <input id="form_choose_DateOfBirth" name="DateOfBirth" class="form-control" type="date" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Email</label>
+                                        <input name="Email" class="form-control" type="email" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Số điện thoại</label>
+                                        <input name="Phone" class="form-control" type="text">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="form_choose_password">Mật khẩu</label>
+                                        <input id="form_choose_password" name="Password" class="form-control" type="password" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Nhập lại mật khẩu</label>
+                                        <input id="form_re_enter_password" name="RePassword" class="form-control" type="password" required>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <a class="forgot-link" href="/account/login">Already have an account?</a>
+                                </div>
+                                <button class="btn btn-primary btn-block btn-lg login-btn" type="submit" id="btnReg">Signup</button>
+                                <div class="login-or">
+                                    <span class="or-line"></span>
+                                    <span class="span-or">or</span>
+                                </div>
+                                <div class="row form-row social-login">
+                                    <div class="col-6">
+                                        <a href="#" class="btn btn-facebook btn-block disabled"><i class="fab fa-facebook-f mr-1"></i> Login</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="#" class="btn btn-google btn-block disabled"><i class="fab fa-google mr-1"></i> Login</a>
+                                    </div>
+                                </div>
+                                <input type="hidden" value="@url" name="ReturnUrl" id="rtUrl" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/js/live/login.client.js"></script>
+}

@@ -1,0 +1,185 @@
+﻿@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var latestPosts = (List<Article>)ViewBag.LatestPosts ?? new List<Article>();
+}
+@using BELibrary.Entity
+@model BELibrary.Entity.Article
+
+<div class="breadcrumb-bar">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-12 col-12">
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Bài viết</li>
+                    </ol>
+                </nav>
+                <h2 class="breadcrumb-title">Chi tiết</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-12">
+                <div class="blog-view">
+                    <div class="blog blog-single-post">
+                        <div class="blog-image">
+                            <a href="javascript:void(0);"><img alt="" src="@Model.Image" class="img-fluid"></a>
+                        </div>
+                        <h3 class="blog-title">Doccure – Making your clinic painless visit?</h3>
+                        <div class="blog-info clearfix">
+                            <div class="post-left">
+                                <ul>
+                                    <li>
+                                        <div class="post-author">
+                                            <a href="#"><img src="~/Content/theme/img/doctors/doctor-thumb-02.jpg" alt="Post Author"> <span>@Model.CreatedBy</span></a>
+                                        </div>
+                                    </li>
+                                    <li><i class="far fa-calendar"></i>@Model.CreatedDate.ToString("D")</li>
+                                    <li><i class="fa fa-tags"></i>Health Tips</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="blog-content">
+                            @Html.Raw(Model.Content)
+                        </div>
+                    </div>
+                    <div class="card blog-share clearfix">
+                        <div class="card-header">
+                            <h4 class="card-title">Share the post</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="social-share">
+                                <li><a href="#" title="Facebook"><i class="fab fa-facebook"></i></a></li>
+                                <li><a href="#" title="Twitter"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#" title="Linkedin"><i class="fab fa-linkedin"></i></a></li>
+                                <li><a href="#" title="Google Plus"><i class="fab fa-google-plus"></i></a></li>
+                                <li><a href="#" title="Youtube"><i class="fab fa-youtube"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card author-widget clearfix">
+                        <div class="card-header">
+                            <h4 class="card-title">About Author</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="about-author">
+                                <div class="about-author-img">
+                                    <div class="author-img-wrap">
+                                        <a href="#"><img class="img-fluid rounded-circle" alt="" src="~/Content/theme/img/doctors/doctor-thumb-02.jpg"></a>
+                                    </div>
+                                </div>
+                                <div class="author-details">
+                                    <a href="doctor-profile.html" class="blog-author-name">@Model.CreatedBy</a>
+                                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card blog-comments clearfix">
+                        <div class="card-header">
+                            <h4 class="card-title">Comments (12)</h4>
+                        </div>
+                        <div class="card-body pb-0">
+                            @*here*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
+
+                <div class="card search-widget">
+                    <div class="card-body">
+                        <form class="search-form" action="/article/index">
+                            <div class="input-group">
+                                <input type="text" placeholder="Search..." name="query" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card post-widget">
+                    <div class="card-header">
+                        <h4 class="card-title">Latest Posts</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="latest-posts">
+                            @foreach (var art in latestPosts)
+                            {
+                                <li>
+                                    <div class="post-thumb">
+                                        <a href="/article/detail?id=@art.Id">
+                                            <img class="img-fluid" src="@art.Image" alt="@art.Title">
+                                        </a>
+                                    </div>
+                                    <div class="post-info">
+                                        <h4>
+                                            <a href="/article/detail?id=@art.Id">@art.Title</a>
+                                        </h4>
+                                        <p>@art.CreatedDate.ToString("yyyy MMMM dd")</p>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card category-widget">
+                    <div class="card-header">
+                        <h4 class="card-title">Blog Categories</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="categories">
+                            <li><a href="#">Cardiology <span>(62)</span></a></li>
+                            <li><a href="#">Health Care <span>(27)</span></a></li>
+                            <li><a href="#">Nutritions <span>(41)</span></a></li>
+                            <li><a href="#">Health Tips <span>(16)</span></a></li>
+                            <li><a href="#">Medical Research <span>(55)</span></a></li>
+                            <li><a href="#">Health Treatment <span>(07)</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card tags-widget">
+                    <div class="card-header">
+                        <h4 class="card-title">Tags</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="tags">
+                            <li><a href="#" class="tag">Children</a></li>
+                            <li><a href="#" class="tag">Disease</a></li>
+                            <li><a href="#" class="tag">Appointment</a></li>
+                            <li><a href="#" class="tag">Booking</a></li>
+                            <li><a href="#" class="tag">Kids</a></li>
+                            <li><a href="#" class="tag">Health</a></li>
+                            <li><a href="#" class="tag">Family</a></li>
+                            <li><a href="#" class="tag">Tips</a></li>
+                            <li><a href="#" class="tag">Shedule</a></li>
+                            <li><a href="#" class="tag">Treatment</a></li>
+                            <li><a href="#" class="tag">Dr</a></li>
+                            <li><a href="#" class="tag">Clinic</a></li>
+                            <li><a href="#" class="tag">Online</a></li>
+                            <li><a href="#" class="tag">Health Care</a></li>
+                            <li><a href="#" class="tag">Consulting</a></li>
+                            <li><a href="#" class="tag">Doctors</a></li>
+                            <li><a href="#" class="tag">Neurology</a></li>
+                            <li><a href="#" class="tag">Dentists</a></li>
+                            <li><a href="#" class="tag">Specialist</a></li>
+                            <li><a href="#" class="tag">Doccure</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

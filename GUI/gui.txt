@@ -1,0 +1,5 @@
+- Chỉnh file web.config cho chuỗi kết nối ConnectionString
+- Tạo cơ sở dữ liệu bằng cách import database hoặc dùng update-database (PMC)
+- Chạy website:
+	account: admin
+	password: 123qwe

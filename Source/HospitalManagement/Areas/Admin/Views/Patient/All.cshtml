@@ -1,0 +1,144 @@
+﻿@using BELibrary.Entity
+@using BELibrary.Utils
+@model List<Patient>
+@{
+    ViewBag.Title = ViewBag.Feature + " " + ViewBag.Element;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+@section CSS{
+    <!--DataTables [ OPTIONAL ]-->
+    <link href="/Areas/Admin/Content/plugins/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="/Areas/Admin/Content/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css" rel="stylesheet">
+}
+<!--List-->
+<div class="panel">
+    <div class="panel-body">
+
+        <div class="pad-btm form-inline">
+            <div class="row">
+                <div class="col-sm-6 table-toolbar-left">
+                    <a class="btn btn-success" href="/Admin/Patient/Create">
+                        <i class="demo-pli-add"></i> Thêm
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped" id="tblData">
+                <thead>
+                    <tr>
+                        <th class="text-center">STT</th>
+                        <th class="text-center">Mã BN</th>
+                        <th class="text-center">Họ Tên</th>
+                        <th class="text-center">Mã căn cước</th>
+                        <th class="text-center">Ngày sinh</th>
+                        <th class="text-center">Giới tính</th>
+                        <th class="text-center">SĐT</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Select((value, i) => new { i, value }))
+                    {
+                        <tr id="row_@item.value.Id">
+                            <td class="text-center">@(item.i + 1)</td>
+                            <td class="text-center"><span class="badge badge-success">@item.value.PatientCode</span></td>
+                            <td class="text-center">@item.value.FullName</td>
+                            <td class="text-center">@item.value.IndentificationCardId</td>
+                            <td class="text-center">@item.value.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                            <td class="text-center">@(item.value.Gender ? "Nam" : "Nữ")</td>
+                            <td class="text-center">@item.value.Phone</td>
+                            <td class="text-center">
+                                <button class="btn btn-info btn-sm btn-icon  add-tooltip" data-original-title="Xem bệnh án" data-container="body" title="Xem bệnh án" onclick="openRecord('@item.value.Id')"><i class="fa fa-calendar  icon-lg"></i></button>
+                                <button class="btn btn-info btn-sm btn-icon  add-tooltip" data-original-title="Sửa thông tin" data-container="body" onclick="openEditing('@item.value.Id')"><i class="demo-psi-pen-5 icon-lg"></i></button>
+                                <button class="btn btn-danger btn-sm btn-icon  add-tooltip" data-original-title="Xóa bệnh nhân" data-container="body" onclick="deleteElement('@item.value.Id','@item.value.FullName')"><i class="demo-psi-recycling icon-lg"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel-footer text-center">
+        <button class="btn btn-primary" onclick="window.history.back();">Trở về</button>
+    </div>
+</div>
+
+@section Scripts {
+    <!--DataTables [ OPTIONAL ]-->
+    <script src="/Areas/Admin/Content/plugins/datatables/media/js/jquery.dataTables.js"></script>
+    <script src="/Areas/Admin/Content/plugins/datatables/media/js/dataTables.bootstrap.js"></script>
+    <script src="/Areas/Admin/Content/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#tblData').dataTable({
+                "language": {
+                    "paginate": {
+                        "previous": '<i class="demo-psi-arrow-left"></i>',
+                        "next": '<i class="demo-psi-arrow-right"></i>'
+                    },
+                    "search": "Tìm kiếm:",
+                    "emptyTable": "Dữ liệu trống",
+                    "zeroRecords": "Không tìm thấy bản nghi nào",
+                    "decimal": "",
+                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                    "infoEmpty": "Hiển thị 0 đến 0 của 0 bản ghi",
+                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Hiển thị _MENU_ bản ghi",
+                    "loadingRecords": "Đang tải...",
+                    "processing": "Đang xử lý...",
+                    "aria": {
+                        "sortAscending": ": Kích hoạt để sắp xếp cột tăng",
+                        "sortDescending": ": Kích hoạt để sắp xếp cột giảm"
+                    }
+                },
+                order: [[0, 'desc']],
+                columnDefs: [{
+                    targets: [0, 1, 2, 3, 4, 5, 6]
+                }]
+            });
+        });
+        const baseUrl = "/admin/Patient";
+
+        //Edit
+        function openEditing(id) {
+            notify.loading();
+            window.location.href = `${baseUrl}/update?id=${id}`;
+        }
+        //Edit
+        function openRecord(id) {
+            notify.loading();
+            window.location.href = `/admin/patientRecord?patientId=${id}`;
+        }
+
+        //Del
+        function deleteElement(_id, name) {
+            var mess = 'Xác nhận <b>xóa</b> bản ghi <b>' + name + '</b>';
+            bootbox.confirm(mess, function (result) {
+                if (result) {
+                    ajax.del(`${baseUrl}/del`,
+                        { id: _id },
+                        (response) => {
+                            if (response.status) {
+                                notify.push(response.mess, notify.EType.SUCCESS);
+                                $(`#row_${_id}`).remove();
+                            } else {
+                                notify.push(mess, notify.EType.DANGER);
+                            }
+                        },
+                        (jqXHR, textStatus) => {
+                            const mess = `Request failed: ${textStatus}`;
+                            notify.push(mess, notify.EType.DANGER);
+
+                        }
+                    );
+                }
+            });
+        }
+    </script>
+}

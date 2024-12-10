@@ -1,0 +1,224 @@
+﻿@{
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.HasHead = false;
+}
+@using System.Web.UI.WebControls
+@model BELibrary.Entity.Article
+<!-- Contact Toolbar -->
+<!---------------------------------->
+@section CSS {
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 500px;
+        }
+    </style>
+
+}
+<form id="form" style="position: relative">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @if (ViewBag.isEdit)
+    {
+        <input type="hidden" value="true" name="isEdit" />
+        <input type="hidden" value="@Model.Id" name="Id" />
+    }
+    else
+    {
+        <input type="hidden" value="false" name="isEdit" />
+    }
+    <div style=" position: fixed;
+                right: 85px;
+                z-index: 9999;
+                width: 150px;">
+        <div class="col-sm-6 col-sm-offset-6 toolbar-right text-right" style="width: 150px;
+                                                                              display: flex;
+                                                                              justify-content: center;    right: 36px;
+                                                                              top: 80px;">
+            <button class="btn btn-default btn-danger" style="margin-right: 5px" onclick="window.history.back()">Hủy</button>
+            <button class="btn btn-default btn-primary">Lưu bài viết</button>
+        </div>
+    </div>
+    <!---------------------------------->
+
+    <div class="fixed-fluid">
+        <div class="fluid">
+            <div class="form-group">
+
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control input-lg", @placeholder = "Tiêu đề", @type = "text" } })
+            </div>
+
+            <div class="panel">
+                <div class="panel-body">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Ảnh hồ sơ</label>
+                            <img class="img-responsive" alt="" id="ImgAvt" src="" />
+
+                            <div class="input-group mar-btm" style="padding-top: 10px">
+                                @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control", @maxlength = 250 } })
+                                <span class="input-group-btn" onclick="chooseImgAvatar()">
+                                    <a class="btn btn-mint btn-icon"><i class="fa fa-cloud-upload icon-lg"></i></a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @id = "Description", @rows = "5", @placeholder = "Mô tả ngắn" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-body">
+                    @Html.TextAreaFor(model => model.Content, new { @class = "form-control", @id = "FullDescription", @rows = "50" })
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+
+    <script src="~/Areas/Admin/Content/plugins/ckeditor-new/ckeditor.js"></script>
+
+    <script>
+        let editor;
+
+        $(document).ready(function () {
+            ClassicEditor
+                .create(document.querySelector('#FullDescription'), {
+                    toolbar: {
+                        items: [
+                            'heading',
+                            '|',
+                            'bold',
+                            'italic',
+                            'link',
+                            'bulletedList',
+                            'numberedList',
+                            '|',
+                            'outdent',
+                            'indent',
+                            '|',
+                            'imageUpload',
+                            'blockQuote',
+                            'insertTable',
+                            'mediaEmbed',
+                            'undo',
+                            'redo',
+                            'fontFamily',
+                            'fontColor',
+                            'alignment',
+                            'highlight',
+                            'horizontalLine',
+                            'imageInsert'
+                        ]
+                    },
+                    language: 'vi',
+                    image: {
+                        toolbar: [
+                            'imageTextAlternative',
+                            'imageStyle:inline',
+                            'imageStyle:block',
+                            'imageStyle:side'
+                        ]
+                    },
+                    table: {
+                        contentToolbar: [
+                            'tableColumn',
+                            'tableRow',
+                            'mergeTableCells',
+                            'tableCellProperties',
+                            'tableProperties'
+                        ]
+                    },
+                    licenseKey: '',
+                    simpleUpload: {
+                        // The URL that the images are uploaded to.
+                        uploadUrl: '/admin/regimen/UploadFile'
+
+                        // Enable the XMLHttpRequest.withCredentials property.
+                        // withCredentials: true,
+
+                        // Headers sent along with the XMLHttpRequest to the upload server.
+                        //headers: {
+
+                        //}
+                    }
+
+                })
+                .then(e => {
+                    editor = e;
+
+                })
+                .catch(error => {
+                    console.error('Oops, something went wrong!');
+                    console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+                    console.warn('Build id: qfu28fkrtpm7-x3s4huyp9ut1');
+                    console.error(error);
+                });
+
+            $("#Image").change(function () {
+                const imgSrc = $("input[name=Image]").val();
+                if (imgSrc !== "") {
+                    $("#ImgAvt").attr("src", imgSrc);
+                }
+            });
+
+        });
+
+        function chooseImgAvatar() {
+            const finder = new CKFinder();
+            finder.selectActionFunction = function (fileUrl) {
+                $("#ImgAvt").attr("src", fileUrl);
+                $("#Image").val(fileUrl);
+            }
+            finder.popup();
+        }
+
+        const baseUrl = '/admin/article';
+        // Valid
+        const fields = {
+        }
+        validator.valid('form', fields, (e) => {
+            e.preventDefault();
+
+            var content = editor.getData();
+
+            if (content.length <= 0) {
+                $.niftyNoty({
+                    type: 'danger',
+                    icon: 'fa fa-minus',
+                    message: "Nội dung không được bỏ trống",
+                    container: 'floating',
+                    timer: 3000
+                });
+                return;
+            }
+            var formData = new FormData(document.getElementById('form'));
+
+            formData.set("Content", content);
+            ajax.createOrUpdate(`${baseUrl}/CreateOrEdit`, formData,
+                (response) => {
+                    if (response.status) {
+                        notify.push(response.mess, notify.EType.SUCCESS);
+                        notify.loading();
+                        setTimeout(function () {
+                            window.location.href = baseUrl;
+                        }, 500);
+
+                    } else {
+                        notify.push(response.mess, notify.EType.DANGER);
+                        $(':input[type="submit"]').prop('disabled', false);
+                    }
+                },
+                (jqXHR, textStatus) => {
+                    const mess = `Request failed: ${textStatus}`;
+                    notify.push(mess, notify.EType.DANGER);
+                    $(':input[type="submit"]').prop('disabled', false);
+                }
+            );
+        });
+    </script>
+}

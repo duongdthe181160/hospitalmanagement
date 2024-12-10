@@ -1,0 +1,526 @@
+﻿@using HospitalManagement.Handler
+@using BELibrary.Entity
+
+@{
+    ViewBag.Title = "Trang cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = CookiesManage.GetUser();
+}
+
+@model PatientRecord
+@{
+    ViewBag.Title = "Create";
+    var patient = (Patient)ViewBag.Patient ?? new Patient();
+    var record = (Record)ViewBag.Record ?? new Record();
+
+    var detailRecords = (List<DetailRecord>)ViewBag.DetailRecords ?? new List<DetailRecord>();
+
+    var mainDetailRecord = (DetailRecord)ViewBag.MainDetailRecord ?? new DetailRecord();
+    var result = record.Result;
+    var note = record.Note;
+}
+
+@section CSS
+{
+
+    <style>
+        .fa {
+            margin-right: 10px;
+        }
+
+        .bg-black-333 {
+            background-color: darkseagreen;
+            margin-top: 10px;
+            padding-top: 10px;
+            padding-bottom: 32px;
+            color: white;
+        }
+
+        .full-name {
+            padding-top: 12px;
+            color: white;
+        }
+
+        .styled-icons li {
+            display: inline-block;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        .styled-icons.icon-sm a {
+            font-size: 13px;
+            height: 30px;
+            line-height: 30px;
+            margin: 2px 7px 2px 0;
+            width: 30px;
+        }
+
+        .styled-icons.icon-circled a {
+            border-radius: 50%;
+        }
+
+        .styled-icons.icon-gray a {
+            background-color: #eeeeee;
+            color: #555555;
+            display: block;
+            font-size: 18px;
+            height: 36px;
+            line-height: 36px;
+            width: 36px;
+        }
+
+        .mb-15 {
+            margin-bottom: 15px !important;
+        }
+
+        .mt-15 {
+            margin-top: 15px !important;
+        }
+
+        ul, ol {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .fa {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+}
+<!-- Start main-content -->
+<section class="container">
+    <div class="breadcrumb-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-8 col-12">
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Account</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-body">
+            <div class="fixed-fluid" style="font-family: roboto;">
+                <div class="fixed-md-200 pull-sm-left fixed-right-border">
+                    <!-- Simple profile -->
+                    <div class="text-center">
+                        <div class="pad-ver">
+                            <img src="@(string.IsNullOrEmpty(patient.ImageProfile) ? "/Areas/Admin/Content/img/profile-photos/1.png" : patient.ImageProfile)" class="img-lg img-circle  w-100" alt="Profile Picture">
+                        </div>
+                        <h4 class="text-lg text-overflow mar-no">@patient.FullName</h4>
+                        <p class="text-sm text-muted">@patient.Job</p>
+
+                        <a class="btn btn-block btn-success btn-lg disable" href="#">Sửa thông tin</a>
+                    </div>
+                    <hr>
+
+                    <!-- Profile Details -->
+                    <p class="pad-ver text-main text-sm text-uppercase text-bold">Thông tin</p>
+                    <p><i class="fa fa-code icon-lg icon-fw"></i> <label class="label label-success" style="font-size: 12px;">@patient.PatientCode</label> </p>
+                    <p><i class="fa fa-map-marker icon-lg icon-fw"></i> @patient.Address</p>
+                    <p><a href="#" class="btn-link"><i class="fa fa-tags icon-lg icon-fw"></i> @patient.DateOfBirth.ToString("dd/MM/yyyy")</a></p>
+                    <p><i class="fa fa-phone icon-lg icon-fw"></i> @patient.Phone</p>
+
+                    <div class="fixed-sm-300 pull-sm-right">
+                        <form id="form-record">
+                            <div class="panel">
+                                <div class="panel-body" style="padding: 0;">
+                                    <p class="text-main text-bold text-uppercase">Bác sĩ hội chuẩn</p>
+                                    <input type="hidden" value="@record.Id" name="Id" />
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <i class="fa fa-user-md"></i>
+                                                @if (record.Doctor != null)
+                                                {
+                                                    <span>@record.Doctor.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Chưa xác đinh</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-main text-bold text-uppercase">Kết quả</p>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextAreaFor(model => result, new { @class = "form-control", @rows = "10" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <p class="text-main text-sm text-uppercase text-bold">Ghi chú</p>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextAreaFor(model => note, new { @class = "form-control", @rows = "10" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="fluid">
+                    <div class="fixed-fluid">
+
+                        <div class="fluid">
+                            <div class="panel">
+
+                                <!--Panel heading-->
+                                <div class="panel-heading">
+                                    <div class="panel-control">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li class="nav-item"><a href="#demo-tabs-box-1" data-toggle="tab" aria-controls="demo-tabs-box-1" aria-selected="true" class="active">Bệnh án</a></li>
+                                            <li class="nav-item"><a href="#demo-tabs-box-2" data-toggle="tab" aria-controls="demo-tabs-box-2" aria-selected="false">Cần lâm sàng</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!--Panel body-->
+                                <div class="panel-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="demo-tabs-box-1" role="tabpanel">
+                                            <div class="form-group text-center">
+                                                <h3> Bệnh án - Bệnh nhân: @patient.FullName</h3>
+                                            </div>
+                                            <div class="panel" style="border: 1px solid;">
+                                                <div class="panel-heading">
+                                                    <div class="panel-control">
+                                                        <ul class="pager">
+                                                            <li class="pt-2">
+                                                                <a class="btn btn-block btn-success" href="javascript:void(0)" onclick="openRedirect(false, '@mainDetailRecord.Id')">Xem đơn thuốc</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- BASIC FORM ELEMENTS -->
+                                                <!--===================================================-->
+                                                <div class="panel-body form-horizontal form-padding">
+                                                    <h3 class="panel-title">I. Hành chính</h3>
+
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Tiêu đề:</label>
+                                                        <div class="col-md-12">
+                                                            @Html.EditorFor(model => model.Title,
+                                                                new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "Eg: Thăm khám mắt 20/10/2021" } })
+                                                        </div>
+                                                    </div>
+
+                                                    <!--Text Input-->
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Họ tên:</label>
+                                                        <div class="col-md-12">
+                                                            <p class="form-control-static">
+                                                                <span class="badge badge-success" id="patient-code">
+                                                                    @patient.PatientCode
+                                                                </span>
+                                                                -
+                                                                <span id="patient-name">
+                                                                    @patient.FullName
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Ngày sinh:</label>
+                                                        <div class="col-md-12">
+                                                            <p class="form-control-static">
+                                                                <span id="patient-date-of-birth"></span>
+                                                                @patient.DateOfBirth.ToString("dd/MM/yyyy")
+                                                                <span id="patient-age">
+                                                                    @(DateTime.Now.Year - patient.DateOfBirth.Year) Tuổi
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Địa chỉ:</label>
+                                                        <div class="col-md-9">
+                                                            <p class="form-control-static" id="patient-address">
+                                                                @patient.Address
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <h3 class="panel-title">II. Thông tin vào</h3>
+
+                                                    <!--Email Input-->
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Ngày:</label>
+                                                        <div class="col-md-12">
+                                                            <input type="text" class="form-control"
+                                                                   disabled value="@DateTime.Now.ToString("dd/MM/yyyy")">
+                                                        </div>
+                                                    </div>
+
+                                                    <!--Password-->
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Giờ:</label>
+                                                        <div class="col-md-12">
+                                                            <input type="text" class="form-control"
+                                                                   disabled value="@DateTime.Now.ToString("HH:mm ")">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="d-flex">
+
+                                                        <div class="col-sm-6 pb-3">
+                                                            <label for="BloodVessel">Mạch:</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span class="input-group-text">I/P</span></div>
+                                                                @Html.EditorFor(model => model.BloodVessel,
+                                                                    new { htmlAttributes = new { @class = "form-control", @type = "number", @readonly = true, @placeholder = "Chỉ số mạch", @step = "0.01" } })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6 pb-3">
+                                                            <label for="BloodVessel">Thân nhiệt:</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span class="input-group-text">&#176;C</span></div>
+                                                                @Html.EditorFor(model => model.BodyTemperature,
+                                                                    new { htmlAttributes = new { @class = "form-control", @type = "number", @readonly = true, @placeholder = "Chỉ số thân nhiệt", @step = "0.01" } })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="d-flex">
+
+                                                        <div class="col-sm-6 pb-3">
+                                                            <label>Nhịp thở:</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span class="input-group-text">&#176;C</span></div>
+                                                                @Html.EditorFor(model => model.Breathing,
+                                                                    new { htmlAttributes = new { @class = "form-control", @type = "number", @readonly = true, @placeholder = "Chỉ số nhịp thở", @step = "0.01" } })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6 pb-3">
+                                                            <label>BMI:</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span class="input-group-text">I/P</span></div>
+                                                                <input type="text" class="form-control"
+                                                                       value="@(Math.Round((Model.Weight / (Model.Height * Model.Height)) * 10000, 2)) "
+                                                                       disabled placeholder="BMI.">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="d-flex">
+
+                                                        <div class="col-sm-6 pb-3">
+                                                            <label>Chiều cao:</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span class="input-group-text">Cm</span></div>
+                                                                @Html.EditorFor(model => model.Height,
+                                                                    new { htmlAttributes = new { @class = "form-control", @type = "number", @readonly = true, @placeholder = "chiều cao", @min = 0, @step = "0.01" } })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6 pb-3">
+                                                            <label>Nặng:</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span class="input-group-text">Kg</span></div>
+                                                                @Html.EditorFor(model => model.Weight,
+                                                                    new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "number", @placeholder = "Cân nặng", @min = 0, @step = "0.01" } })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!--Readonly Input-->
+
+                                                    <div class="col-md-12 text-center">
+                                                        <hr style="width: 50%" />
+                                                    </div>
+
+                                                    <!--Thị lực-->
+                                                    <div class="form-group">
+
+                                                        <label class="col-md-1 control-label"></label>
+                                                        <div class="col-md-12">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center">Thị Lực</th>
+                                                                        <th class="text-center">Không kính</th>
+                                                                        <th class="text-center">Kính lỗ</th>
+                                                                        <th class="text-center">Có kính</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="td-center">Mắt Trái: </td>
+                                                                        <td>
+                                                                            @Html.EditorFor(model => model.VisionWithoutGlassesLeft,
+                                                                                new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "10/10" } })
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.EditorFor(model => model.VisionWithGlassHoleLeft,
+                                                                                new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "10/10" } })
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.EditorFor(model => model.VisionWithGlassLeft,
+                                                                                new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "10/10" } })
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="td-center">Mắt Phải:</td>
+                                                                        <td>
+                                                                            @Html.EditorFor(model => model.VisionWithoutGlassesRight,
+                                                                                new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "10/10" } })
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.EditorFor(model => model.VisionWithGlassHoleRight,
+                                                                                new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "10/10" } })
+                                                                        </td>
+                                                                        <td>
+                                                                            @Html.EditorFor(model => model.VisionWithGlassRight,
+                                                                                new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "10/10" } })
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="td-center">Nhãn áp P:</td>
+                                                                        <td>
+                                                                            @Html.EditorFor(model => model.EyePressureRight,
+                                                                                new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "10/10" } })
+                                                                        </td>
+                                                                        <td class="td-center">Nhãn áp T: </td>
+                                                                        <td>
+                                                                            @Html.EditorFor(model => model.EyePressureLeft,
+                                                                                new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "10/10" } })
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Chuẩn đoán Lâm sàng:</label>
+                                                        <div class="col-md-12">
+                                                            @Html.TextAreaFor(model => model.ClinicalSymptoms, new { @class = "form-control", @readonly = true, @rows = "4", @placeholder = "Chuẩn đoán lâm sàng", @maxlength = 1000 })
+                                                        </div>
+                                                    </div>
+
+                                                    <h3 class="panel-title">III. Thông tin ra</h3>
+
+                                                    <!--Readonly Input-->
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Chuẩn đoán 2 mắt:</label>
+                                                        <div class="col-md-12">
+                                                            @Html.EditorFor(model => model.DiagnosingTwoEyes,
+                                                                new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "Eg: Bình thường" } })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Chuẩn đoán mắt trái:</label>
+                                                        <div class="col-md-12">
+                                                            @Html.EditorFor(model => model.DiagnosingLeftEyes,
+                                                                new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "Eg: Bình thường" } })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Chuẩn đoán mắt phải:</label>
+                                                        <div class="col-md-12">
+                                                            @Html.EditorFor(model => model.DiagnosingRightEyes,
+                                                                new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "Eg: Bình thường" } })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--===================================================-->
+                                                <!-- END BASIC FORM ELEMENTS -->
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade " id="demo-tabs-box-2">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped" id="tblData">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">STT</th>
+                                                            <th class="text-center">Tên bệnh </th>
+                                                            <th class="text-center">Trạng thái </th>
+                                                            <th class="text-center">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in detailRecords.Select((value, index) => new { index = (index + 1), value }))
+                                                        {
+                                                            <tr id="row_@item.value.Id">
+                                                                <td class="text-center"><a class="btn-link" href="#">@item.index</a></td>
+                                                                <td class="text-center">@item.value.DiseaseName</td>
+                                                                @if (item.value.Status)
+                                                                {
+                                                                    <td class="text-center">
+                                                                        <label class="label label-success" style="font-size: 12px;">Đã kết luận</label>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="text-center">
+                                                                        <label class="label label-warning" style="font-size: 12px;">Chờ thăm khám</label>
+                                                                    </td>
+                                                                }
+
+                                                                <td class="text-center">
+                                                                    <button class="btn btn-info" title="Chi tiết"
+                                                                            onclick="openRedirect(false, '@item.value.Id')">
+                                                                        Thuốc
+                                                                    </button>
+                                                                    <button class="btn btn-info" title="Chi tiết"
+                                                                            onclick="openRedirect(true, '@item.value.Id')">
+                                                                        Tệp
+                                                                    </button>
+                                                                    <a class="btn btn-info" title="Chi tiết"
+                                                                       href="/account/detailRecord?id=@item.value.Id">
+                                                                        Chi tiết
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center " style="padding-bottom: 20px">
+            <button class="btn btn-primary" onclick="window.history.back()"> Quay lại</button>
+        </div>
+    </div>
+</section>
+<!-- end main-content -->
+@section Scripts {
+    <script>
+        function openRedirect(isFile, id) {
+            if (isFile) {
+                window.location.href = `/record/Attachment?detailRecordId=${id}`;
+            } else {
+                window.location.href = `/record/Prescription?detailRecordId=${id}`;
+            }
+        }
+    </script>
+}

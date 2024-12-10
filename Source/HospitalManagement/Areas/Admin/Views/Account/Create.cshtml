@@ -1,0 +1,257 @@
+﻿@using System.Web.Mvc
+@using BELibrary.Core.Utils
+@using BELibrary.Entity
+@using BELibrary.Utils
+@model Account
+@{
+    ViewBag.Title = ViewBag.Key + " " + ViewBag.Element;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    //var dateOfBirth = Model != null ? Model.DateOfBirth.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+
+                <h3 class="panel-title">@ViewBag.Element</h3>
+            </div>
+            <div class="panel-body" style="width: 50%;
+                                           margin: auto">
+                <form id="form">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @if (ViewBag.isEdit)
+                    {
+                        <input type="hidden" value="true" name="isEdit" />
+                        <input type="hidden" value="@Model.Id" name="Id" />
+                    }
+                    else
+                    {
+                        <input type="hidden" value="false" name="isEdit" />
+                    }
+                    <input type="hidden" value="@ViewBag.Role" name="Role" />
+                    <div id="post" class="tab-pane fade active in">
+                        <div class="panel">
+                            <div class="panel-body">
+                                <div class="row">
+
+                                    @if (ViewBag.isEdit)
+                                    {
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Tên đăng nhập</label>
+                                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @readonly = true, @autocomplete = "off", @class = "form-control", @required = "required", @maxlength = 250 } })
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Tên đăng nhập</label>
+                                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @autocomplete = "off", @class = "form-control", @required = "required", @maxlength = 250 } })
+                                            </div>
+                                        </div>
+
+                                    }
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Tên đầy đủ</label>
+                                            @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control", @required = "required", @maxlength = 250 } })
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (ViewBag.Role == RoleKey.Admin)
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Giới tính</label>
+                                                @Html.DropDownList("Gender", (SelectList)ViewBag.Genders, "---Select---", new { @class = "form-control", @required = "required" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Phone</label>
+                                                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", @required = "required", @maxlength = 250 } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if (ViewBag.Role == RoleKey.Doctor)
+                                {
+                                    if (ViewBag.isEdit)
+                                    {
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Bác sĩ</label>
+                                                    @Html.EditorFor(model => model.Doctor.Name, new { htmlAttributes = new { @readonly = true, @class = "form-control", @required = "required", @maxlength = 250 } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Bác sĩ</label>
+                                                    @Html.DropDownList("DoctorId", (SelectList)ViewBag.Doctors, "--Chọn bác sĩ--",
+                                                        new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                }
+                                else if (ViewBag.Role == RoleKey.Patient)
+                                {
+
+                                    if (ViewBag.isEdit)
+                                    {
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Bệnh nhân</label>
+                                                    @Html.EditorFor(model => model.Patient.FullName, new { htmlAttributes = new { @readonly = true, @class = "form-control", @required = "required", @maxlength = 250 } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Bệnh nhân</label>
+                                                    @Html.DropDownList("PatientId", (SelectList)ViewBag.Patients, "--Chọn bệnh nhân--",
+                                                        new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                }
+                                <hr />
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Mật khẩu</label>
+                                    <div class="col-lg-9 input-group mar-btm">
+                                        <input type="password" autocomplete="new-password" class="form-control" name="Password" placeholder="Mật khẩu">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Nhập lại mật khẩu</label>
+                                    <div class="col-lg-9 input-group mar-btm">
+                                        <input type="password" class="form-control" autocomplete="off" name="RePassword" placeholder="Nhập lại mật khẩu">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a class="btn btn-default btn-icon icon-lg fa fa-arrow-left fa-lg" href="/admin/account?role=@ViewBag.Role"></a>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-success btn-labeled fa fa-send fa-lg btn-save" style="float: right;" type="submit">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+
+            $("#PatientId").select2();
+            $("#DoctorId").select2();
+
+            $("#PatientId").change(function () {
+                const data = $("#PatientId").select2('data')[0];
+
+                const fullName = !data ? '' : data.text;
+
+                const fillValue = $('#modal-form input[name="FullName"]').val();
+
+                if (!fillValue) {
+
+                    $('form input[name="FullName"]').val(fullName);
+                }
+            });
+
+            $("#DoctorId").change(function () {
+                const data = $("#DoctorId").select2('data')[0];
+
+                const fullName = !data ? '' : data.text;
+
+                const fillValue = $('#modal-form input[name="FullName"]').val();
+
+                if (!fillValue) {
+
+                    $('#form input[name="FullName"]').val(fullName);
+                }
+            });
+
+            const baseUrl = "/admin/account";
+            // Valid
+            const fields = {
+                UserName: {
+                    container: 'tooltip',
+                    validators: {
+                        notEmpty: {
+                            message: 'Tên đăng nhập không được để trống!'
+                        }
+                    }
+                },
+                FullName: {
+                    container: 'tooltip',
+                    validators: {
+                        notEmpty: {
+                            message: 'Họ tên không được để trống!'
+                        }
+                    }
+                }
+            }
+
+            validator.valid('form',
+                fields,
+                (e) => {
+                    e.preventDefault();
+                    var formData = new FormData(document.getElementById('form'));
+
+                    ajax.createOrUpdate(`${baseUrl}/CreateOrEdit`,
+                        formData,
+                        (response) => {
+                            if (response.status) {
+                                notify.push(response.mess, notify.EType.SUCCESS);
+                                notify.loading();
+
+                                window.location.href = `${baseUrl}?role=${@ViewBag.Role}`;
+
+                            } else {
+                                notify.push(response.mess, notify.EType.DANGER);
+                                $(':input[type="submit"]').prop("disabled", false);
+                            }
+                        },
+                        (jqXhr, textStatus) => {
+                            const mess = `Request failed: ${textStatus}`;
+                            notify.push(mess, notify.EType.DANGER);
+                            $(':input[type="submit"]').prop("disabled", false);
+                        }
+                    );
+                });
+        });
+    </script>
+}

@@ -1,0 +1,54 @@
+﻿@using BELibrary.Core.Utils
+@using BELibrary.Entity
+@using BELibrary.Utils
+@model Account
+@{
+    ViewBag.Title = Model.FullName;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!--List-->
+<div class="panel" style="width: 50%;
+                          margin: auto">
+    <div class="panel-body">
+        <div class="panel pos-rel">
+            <div class="pad-all text-center">
+                <a href="#">
+                    <img alt="Profile Picture" class="img-lg img-circle mar-ver" src="@Model.LinkAvatar">
+                    <p class="text-lg text-semibold mar-no text-main">@Model.FullName</p>
+                    <p class="text-sm">@Model.UserName</p>
+                </a>
+            </div>
+            <div class="text-center" style=" margin: auto">
+                <div>
+                    <a href="#" class="btn btn-icon fa fa-phone icon-lg add-tooltip" data-original-title="Facebook" data-container="body">
+                        @Model.Phone
+                    </a>
+                </div>
+                <div>
+                    <a href="#" class="btn btn-icon fa fa-transgender  icon-lg add-tooltip" data-original-title="Facebook" data-container="body">
+                        @(Model.Gender ? "Nam" : "Nữ")
+                    </a>
+                </div>
+                @if (Model.Role == RoleKey.Doctor)
+                {
+                    var doctor = (Doctor)ViewBag.Doctor ?? new Doctor();
+                    <div class="pad-top">
+                        <span>Khoa: </span>
+                        <span class="text-bold">@doctor.Faculty.Name</span>
+                    </div>
+                }
+            </div>
+            <div class="text-center pad-top" style=" margin: auto">
+                <a class="btn btn-success btn-labeled fa fa-send fa-lg btn-sm" href="/admin/profile/edit">Edit</a>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-6">
+                <a class="btn btn-default btn-icon icon-lg fa fa-arrow-left fa-lg" href="/admin/account?role=@ViewBag.Role"></a>
+            </div>
+        </div>
+    </div>
+</div>

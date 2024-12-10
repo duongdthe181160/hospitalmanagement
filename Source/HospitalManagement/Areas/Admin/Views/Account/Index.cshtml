@@ -1,0 +1,107 @@
+﻿@using BELibrary.Core.Utils
+@using BELibrary.Entity
+@using BELibrary.Utils
+
+@model List<Account>
+@{
+    ViewBag.Title = ViewBag.Feature + " " + ViewBag.Element;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+    .select2-container {
+        z-index: 99999;
+        width: 100% !important;
+    }
+
+    span.select2-container {
+        z-index: 10050;
+    }
+</style>
+<!--List-->
+<div class="panel">
+    <div class="panel-body">
+        <div class="pad-btm form-inline">
+            <div class="row">
+                <div class="col-sm-6 table-toolbar-left">
+                    <a href="/admin/account/create?role=@ViewBag.Role"
+                       class="btn btn-purple btn-labeled fa fa-plus">Thêm @ViewBag.Element</a>
+                </div>
+                <div class="col-sm-6 table-toolbar-right">
+                    <button onclick="window.history.back();" class="btn btn-primary"><i class="demo-pli-arrow-left-2"></i> Quay lại</button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">STT</th>
+                        <th class="text-center">Username </th>
+                        <th class="text-center">Họ Tên</th>
+                        <th class="text-center">Quyền</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Select((value, index) => new { index = (index + 1), value }))
+                    {
+                        <tr id="row_@item.value.Id">
+                            <td class="text-center"><a class="btn-link" href="#">@item.index</a></td>
+                            <td class="text-center">@item.value.UserName</td>
+                            <td class="text-center">@item.value.FullName</td>
+                            <td class="text-center">@(RoleKey.GetRole(item.value.Role)) </td>
+                            <td class="text-center">
+                                <a class="btn btn-danger btn-icon add-tooltip"
+                                   data-toggle="tooltip"
+                                   data-original-title="Sửa thông tin cơ bản"
+                                   data-container="body"
+                                   href="/admin/account/update?id=@item.value.Id&role=@item.value.Role">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <button class="btn btn-danger btn-icon" onclick="deleteElement('@item.value.Id','@item.value.FullName')"><i class="demo-psi-recycling icon-lg"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--Create-->
+<!--Script-->
+@section Scripts {
+    <script>
+
+        $(document).ready(function() {
+
+            const baseUrl = "/admin/account";
+
+            //Del
+            function deleteElement(id, name) {
+                var mess = `Xác nhận <b>xóa</b> bản ghi <b>${name}</b>`;
+                bootbox.confirm(mess,
+                    function(result) {
+                        if (result) {
+                            ajax.del(`${baseUrl}/del`,
+                                { id: id },
+                                (response) => {
+                                    if (response.status) {
+                                        notify.push(response.mess, notify.EType.SUCCESS);
+                                        $(`#row_${id}`).remove();
+                                    } else {
+                                        notify.push(mess, notify.EType.DANGER);
+                                        $(':input[type="submit"]').prop("disabled", false);
+                                    }
+                                },
+                                (jqXhr, textStatus) => {
+                                    const mess = `Request failed: ${textStatus}`;
+                                    notify.push(mess, notify.EType.DANGER);
+                                }
+                            );
+                        }
+                    });
+
+            }
+        });
+    </script>
+}

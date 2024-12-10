@@ -1,0 +1,810 @@
+﻿@using BELibrary.Core.Utils
+@using BELibrary.Entity
+@using HospitalManagement.Areas.Admin.Authorization
+@model PatientRecord
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var patient = (Patient)ViewBag.Patient ?? new Patient();
+    var record = (Record)ViewBag.Record ?? new Record();
+    var mainDetailRecords = (DetailRecord)ViewBag.MainDetailRecords ?? new DetailRecord();
+    var detailRecords = (List<DetailRecord>)ViewBag.DetailRecords ?? new List<DetailRecord>();
+
+    var result = record.Result;
+    var note = record.Note;
+
+    var user = CookiesManage.GetUser();
+}
+
+@section CSS{
+    <style>
+        .td-center {
+            text-align: right;
+            vertical-align: middle !important;
+        }
+    </style>
+    <!--DataTables [ OPTIONAL ]-->
+    <link href="/Areas/Admin/Content/plugins/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="/Areas/Admin/Content/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css" rel="stylesheet">
+}
+<style>
+    .select2-container {
+        z-index: 99999;
+        width: 100% !important;
+    }
+
+    .doctor-thumb .select2-container {
+        z-index: 222;
+        width: 100% !important;
+    }
+</style>
+<div class="panel">
+    <div class="panel-body">
+        <div class="fixed-fluid">
+            <div class="fixed-md-200 pull-sm-left fixed-right-border">
+
+                <!-- Simple profile -->
+                <div class="text-center">
+                    <div class="pad-ver">
+                        <img src="~/Areas/Admin/Content/img/profile-photos/1.png" class="img-lg img-circle" alt="Profile Picture">
+                    </div>
+                    <h4 class="text-lg text-overflow mar-no">@patient.FullName</h4>
+                    <p class="text-sm text-muted">@patient.Job</p>
+
+                    <a class="btn btn-block btn-success btn-lg" href="/admin/Patient/update?id=@patient.Id">Xem chi tiết</a>
+                </div>
+                <hr>
+
+                <!-- Profile Details -->
+                <p class="pad-ver text-main text-sm text-uppercase text-bold">Thông tin</p>
+                <p><i class="demo-pli-coding icon-lg icon-fw"></i>   <label class="label label-success" style="font-size: 12px;">@patient.PatientCode</label> </p>
+                <p><i class="demo-pli-map-marker-2 icon-lg icon-fw"></i> @patient.Address</p>
+                <p><a href="#" class="btn-link"><i class="demo-pli-tag-5 icon-lg icon-fw"></i> @patient.DateOfBirth.ToString("dd/MM/yyyy")</a></p>
+                <p><i class="demo-pli-old-telephone icon-lg icon-fw"></i>@patient.Phone</p>
+            </div>
+            <div class="fluid">
+                <div class="text-right">
+                    <button class="btn btn-sm btn-primary" onclick="openModal(false)">Thêm thăm khám</button>
+                    <button class="btn btn-sm btn-success" onclick="saveRecord()">Lưu bệnh án</button>
+                    <button class="btn btn-sm btn-info" onclick="assignItem('@patient.Id')">Cấp vật tư</button>
+                </div>
+
+                <div class="fixed-fluid">
+                    <div class="fixed-sm-300 pull-sm-right">
+                        <form id="form-record">
+                            <div class="panel">
+                                <div class="panel-body">
+                                    <p class="text-main text-bold text-uppercase">Trạng thái bệnh án</p>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.DropDownList("StatusRecord", (SelectList)ViewBag.ListStatus, "Chọn trạng thái",
+                                                    new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-main text-bold text-uppercase">Bác sĩ hội chuẩn</p>
+                                    @if (user.Role == RoleKey.Doctor)
+                                    {
+                                        <input type="hidden" value="@record.Id" name="Id" />
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-12 doctor-thumb">
+                                                    <input class="form-control" value="Bạn" readonly="readonly" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" value="@record.Id" name="Id" />
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-12 doctor-thumb">
+                                                    @Html.DropDownList("DoctorId", (SelectList)ViewBag.Doctors, "Chọn bác sĩ",
+                                                        new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <p class="text-main text-bold text-uppercase">Kết quả</p>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextAreaFor(model => result, new { @class = "form-control", @rows = "10" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <p class="text-main text-sm text-uppercase text-bold">Ghi chú</p>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextAreaFor(model => note, new { @class = "form-control", @rows = "10" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="fluid">
+
+                        <div class="panel">
+
+                            <!--Panel heading-->
+                            <div class="panel-heading">
+                                <div class="panel-control">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#demo-tabs-box-1" data-toggle="tab" aria-expanded="true">Bệnh án</a></li>
+                                        <li class=""><a href="#demo-tabs-box-2" data-toggle="tab" aria-expanded="false">Cần lâm sàng</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!--Panel body-->
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <div class="tab-pane fade active in" id="demo-tabs-box-1">
+                                        <div class="form-group text-center">
+                                            <h3> Bệnh án - Bệnh nhân: @patient.FullName</h3>
+                                        </div>
+                                        <div class="panel" style="border: 1px solid;">
+                                            <div class="panel-heading">
+                                                <div class="panel-control">
+                                                    <ul class="pager">
+                                                        <li><a href="/admin/patientRecord/update?id=@Model.Id">Sửa</a></li>
+                                                        <li><a href="javascript:void(0)" onclick="openRedirect(false, '@mainDetailRecords.Id')">Cho thuốc</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- BASIC FORM ELEMENTS -->
+                                            <!--===================================================-->
+                                            <div class="panel-body form-horizontal form-padding">
+                                                <h3 class="panel-title">I. Hành chính</h3>
+
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Tiêu đề:</label>
+                                                    <div class="col-md-9">
+                                                        @Html.EditorFor(model => model.Title,
+                                                            new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "Eg: Thăm khám mắt 20/10/2021" } })
+                                                    </div>
+                                                </div>
+
+                                                <!--Text Input-->
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Họ tên:</label>
+                                                    <div class="col-md-9">
+                                                        <p class="form-control-static">
+                                                            <span class="badge badge-success" id="patient-code">
+                                                                @patient.PatientCode
+                                                            </span>
+                                                            -
+                                                            <span id="patient-name">
+                                                                @patient.FullName
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Ngày sinh:</label>
+                                                    <div class="col-md-9">
+                                                        <p class="form-control-static">
+                                                            <span id="patient-date-of-birth"></span>
+                                                            @patient.DateOfBirth.ToString("dd/MM/yyyy")
+                                                            <span id="patient-age">
+                                                                @(DateTime.Now.Year - patient.DateOfBirth.Year) Tuổi
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Địa chỉ:</label>
+                                                    <div class="col-md-9">
+                                                        <p class="form-control-static" id="patient-address">
+                                                            @patient.Address
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <h3 class="panel-title">II. Thông tin vào</h3>
+
+                                                <!--Email Input-->
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-md-3 control-label">Ngày:</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control"
+                                                               disabled value="@DateTime.Now.ToString("dd/MM/yyyy")">
+                                                    </div>
+                                                </div>
+
+                                                <!--Password-->
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-md-3 control-label">Giờ:</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control"
+                                                               disabled value="@DateTime.Now.ToString("HH:mm ")">
+                                                    </div>
+                                                </div>
+
+                                                <!--Readonly Input-->
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-md-3 control-label">Mạch:</label>
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.BloodVessel,
+                                                            new { htmlAttributes = new { @class = "form-control", @type = "number", @readonly = true, @placeholder = "Chỉ số mạch", @step = "0.01" } })
+                                                    </div>
+                                                    <label class="col-md-1 control-label">I/P</label>
+                                                </div>
+
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-md-3 control-label">Thân nhiệt:</label>
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.BodyTemperature,
+                                                            new { htmlAttributes = new { @class = "form-control", @type = "number", @readonly = true, @placeholder = "Chỉ số thân nhiệt", @step = "0.01" } })
+                                                    </div>
+                                                    <label class="col-md-1 control-label">&#176;C</label>
+                                                </div>
+
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-md-3 control-label">Nhịp thở:</label>
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.Breathing,
+                                                            new { htmlAttributes = new { @class = "form-control", @type = "number", @readonly = true, @placeholder = "Chỉ số nhịp thở", @step = "0.01" } })
+                                                    </div>
+                                                    <label class="col-md-1 control-label">I/P</label>
+                                                </div>
+
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-md-3 control-label">BMI:</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control"
+                                                               value="@(Math.Round((Model.Weight/(Model.Height*Model.Height))*10000,2)) "
+                                                               disabled placeholder="BMI.">
+                                                    </div>
+                                                    <label class="col-md-1 control-label">I/P</label>
+                                                </div>
+
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-md-3 control-label">Cao:</label>
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.Height,
+                                                            new { htmlAttributes = new { @class = "form-control", @type = "number", @readonly = true, @placeholder = "chiều cao", @min = 0, @step = "0.01" } })
+                                                    </div>
+                                                    <label class="col-md-1 control-label">Cm</label>
+                                                </div>
+
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-md-3 control-label">Nặng:</label>
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.Weight,
+                                                            new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "number", @placeholder = "Cân nặng", @min = 0, @step = "0.01" } })
+                                                    </div>
+                                                    <label class="col-md-1 control-label">Kg</label>
+                                                </div>
+
+                                                <div class="col-md-12 text-center">
+                                                    <hr style="width: 50%" />
+                                                </div>
+
+                                                <!--Thị lực-->
+                                                <div class="form-group">
+
+                                                    <label class="col-md-1 control-label"></label>
+                                                    <div class="col-md-11">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center">Thị Lực</th>
+                                                                    <th class="text-center">Không kính</th>
+                                                                    <th class="text-center">Kính lỗ</th>
+                                                                    <th class="text-center">Có kính</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="td-center">Mắt Trái: </td>
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.VisionWithoutGlassesLeft,
+                                                                            new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "10/10" } })
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.VisionWithGlassHoleLeft,
+                                                                            new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "10/10" } })
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.VisionWithGlassLeft,
+                                                                            new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = " a10/10" } })
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="td-center">Mắt Phải:</td>
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.VisionWithoutGlassesRight,
+                                                                            new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "10/10" } })
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.VisionWithGlassHoleRight,
+                                                                            new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "10/10" } })
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.VisionWithGlassRight,
+                                                                            new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "10/10" } })
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="td-center">Nhãn áp P:</td>
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.EyePressureRight,
+                                                                            new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "10/10" } })
+                                                                    </td>
+                                                                    <td class="td-center">Nhãn áp T: </td>
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.EyePressureLeft,
+                                                                            new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "10/10" } })
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Chuẩn đoán Lâm sàng:</label>
+                                                    <div class="col-md-9">
+                                                        @Html.TextAreaFor(model => model.ClinicalSymptoms, new { @class = "form-control", @readonly = true, @rows = "4", @placeholder = "Chuẩn đoán lâm sàng", @maxlength = 1000 })
+                                                    </div>
+                                                </div>
+
+                                                <h3 class="panel-title">III. Thông tin ra</h3>
+
+                                                <!--Readonly Input-->
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Chuẩn đoán 2 mắt:</label>
+                                                    <div class="col-md-9">
+                                                        @Html.EditorFor(model => model.DiagnosingTwoEyes,
+                                                            new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "Eg: Bình thường" } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Chuẩn đoán mắt trái:</label>
+                                                    <div class="col-md-9">
+                                                        @Html.EditorFor(model => model.DiagnosingLeftEyes,
+                                                            new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = true, @placeholder = "Eg: Bình thường" } })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Chuẩn đoán mắt phải:</label>
+                                                    <div class="col-md-9">
+                                                        @Html.EditorFor(model => model.DiagnosingRightEyes,
+                                                            new { htmlAttributes = new { @class = "form-control", @readonly = true, @type = "text", @placeholder = "Eg: Bình thường" } })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--===================================================-->
+                                            <!-- END BASIC FORM ELEMENTS -->
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade " id="demo-tabs-box-2">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped" id="tblData">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">STT</th>
+                                                        <th class="text-center">Tên bệnh </th>
+                                                        <th class="text-center">Trạng thái </th>
+                                                        <th class="text-center">Lần khám </th>
+                                                        <th class="text-center">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in detailRecords.Select((value, index) => new { index = (index + 1), value }))
+                                                    {
+                                                        <tr id="row_@item.value.Id">
+                                                            <td class="text-center"><a class="btn-link" href="#">@item.index</a></td>
+                                                            <td class="text-center">@item.value.DiseaseName</td>
+                                                            @if (item.value.Status)
+                                                            {
+                                                                <td class="text-center">
+                                                                    <label class="label label-success" style="font-size: 12px;">Đã kết luận</label>
+                                                                </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">
+                                                                    <label class="label label-warning" style="font-size: 12px;">Chờ thăm khám</label>
+                                                                </td>
+                                                            }
+
+                                                            <td class="text-center">@item.value.Process</td>
+                                                            <td class="text-center">
+                                                                <button class="btn btn-info btn-icon" title="Thuốc" onclick="openRedirect(false, '@item.value.Id')"><i class="fa fa-cubes icon-sm"></i></button>
+                                                                <button class="btn btn-info btn-icon" title="Tệp đính kèm" onclick="openRedirect(true, '@item.value.Id')"><i class="fa fa-files-o icon-sm"></i></button>
+                                                                <button class="btn btn-info btn-icon" title="Sửa" onclick="openModal(true, '@item.value.Id')"><i class="demo-psi-pen-5 icon-sm"></i></button>
+                                                                <button class="btn btn-danger btn-icon" onclick="deleteElement('@item.value.Id', '@item.value.DiseaseName')"><i class="demo-psi-recycling icon-sm"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-center">
+        <a class="btn btn-primary" href="@ViewBag.BaseUrl">Trở về</a>
+    </div>
+</div>
+
+<!--Create-->
+<div class="modal fade" id="data-modal" role="dialog" aria-labelledby="create" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="padding: 5% 0;">
+        <div class="modal-content">
+            <form id="modal-form" class="form-horizontal" method="post">
+                <input type="hidden" name="Id" />
+                <input type="hidden" name="isEdit" />
+                <input type="hidden" name="recordId" value="@record.Id" />
+                <input type="hidden" id="type" value="0" />
+                <!--Modal header-->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title">@ViewBag.Element</h4>
+                </div>
+
+                <!--Modal body-->
+                <div class="modal-body">
+                    <input type="hidden" name="isEdit" value="false" />
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Tên bệnh</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control" name="DiseaseName" placeholder="Nhập tên bệnh" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Lần thăm khám</label>
+                        <div class="col-lg-7">
+                            <input type="number" class="form-control" name="Process" placeholder="Lần thăm khám" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Tên khoa</label>
+                        <div class="col-lg-7">
+                            @Html.DropDownList("FacultyId", (SelectList)ViewBag.Faculties,
+                                new { @class = "form-control", @required = "required" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Tên bác sĩ</label>
+                        <div class="col-lg-7 modal-doctor">
+                            @Html.DropDownList("DetailDoctorId", (SelectList)ViewBag.Doctors, "Chọn bác sĩ",
+                                new { @class = "form-control", @required = "required", @disabled = true })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Ghi chú</label>
+                        <div class="col-lg-7">
+                            <textarea class="form-control" rows="5" name="Note" placeholder="Ghi chú"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Kết quả</label>
+                        <div class="col-lg-7">
+                            <textarea class="form-control" rows="5" name="Result" placeholder="Kết quả"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label " for="demo-hor-inputpass">Trạng thái </label>
+                        <div class="col-lg-7">
+                            <input class="toggle-switch" id="demo-allow-comments" name="Status" type="checkbox">
+                            <label for="demo-allow-comments"></label>
+                            <span style="padding: 1px 0 0 10px" id="status"></span>
+                        </div>
+                    </div>
+                </div>
+                <!--Modal footer-->
+                <div class="modal-footer">
+                    <a data-dismiss="modal" class="btn btn-default">Đóng</a>
+                    <a class="btn btn-primary" onclick="saveDetailRecord(2)">Lưu & Kê đơn thuốc</a>
+                    <a class="btn btn-info" onclick="saveDetailRecord(1)">Lưu & Thêm tệp</a>
+                    <a class="btn btn-success" onclick="saveDetailRecord(0)">Lưu</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Script-->
+@section Scripts {
+
+    <!--DataTables [ OPTIONAL ]-->
+    <script src="/Areas/Admin/Content/plugins/datatables/media/js/jquery.dataTables.js"></script>
+    <script src="/Areas/Admin/Content/plugins/datatables/media/js/dataTables.bootstrap.js"></script>
+    <script src="/Areas/Admin/Content/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#tblData').dataTable({
+                "language": {
+                    "paginate": {
+                        "previous": '<i class="demo-psi-arrow-left"></i>',
+                        "next": '<i class="demo-psi-arrow-right"></i>'
+                    },
+                    "search": "Tìm kiếm:",
+                    "emptyTable": "Dữ liệu trống",
+                    "zeroRecords": "Không tìm thấy bản nghi nào",
+                    "decimal":        "",
+                    "info":           "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                    "infoEmpty":      "Hiển thị 0 đến 0 của 0 bản ghi",
+                    "infoFiltered":   "(filtered from _MAX_ total entries)",
+                    "infoPostFix":    "",
+                    "thousands":      ",",
+                    "lengthMenu":     "Hiển thị _MENU_ bản ghi",
+                    "loadingRecords": "Đang tải...",
+                    "processing":     "Đang xử lý...",
+                    "aria": {
+                        "sortAscending":  ": Kích hoạt để sắp xếp cột tăng",
+                        "sortDescending": ": Kích hoạt để sắp xếp cột giảm"
+                    }
+
+                },
+                order: [[3, 'desc']],
+                columnDefs: [{
+                    targets: [0,1,2,3]
+                }]
+            });
+
+            $(".edit-modal").hide();
+            $("#DoctorId").select2();
+            const doctorId = '@record.DoctorId';
+
+            if (doctorId && doctorId !== '') {
+                $("#DoctorId").val(doctorId);
+                $('#DoctorId').select2().trigger('change');
+            }
+            //
+
+            $("#FacultyId").select2();
+            $("#StatusRecord").val('@record.StatusRecord');
+            $("#DetailDoctorId").select2();
+
+        });
+
+        //Get DoctorList
+
+        $("#FacultyId").change(function() {
+            $("#DetailDoctorId").prop("disabled", false);
+            const id = $("#FacultyId").val();
+            ajax.get(`/admin/doctor/GetDoctors`,
+                { facultyId: id },
+                (response) => {
+                    if (response.status) {
+                        const obj = response.data;
+                        let html = "";
+                        if (obj.length > 0) {
+                            obj.forEach(x => {
+                                html += `<option value="${x.Id}">${x.Name}</option>`;
+                            });
+                        } else {
+                            $("#DetailDoctorId").prop("disabled", true);
+                            html += `<option value="">Không có bác sĩ nào trong khoa!</option>`;
+                        }
+                        $("#DetailDoctorId").html(html);
+                    } else {
+                        $("#DetailDoctorId").prop("disabled", true);
+                        notify.push(response.mess, notify.EType.DANGER);
+                    }
+                },
+                (jqXhr, textStatus) => {
+                    const mess = `Request failed: ${textStatus}`;
+                    notify.push(mess, notify.EType.DANGER);
+
+                }
+            );
+        });
+
+        $("#demo-allow-comments").change(function() {
+            const isChecked = $("#demo-allow-comments").is(":checked");
+            if (isChecked) {
+                $("#status").text("Đã thăm khám");
+            } else {
+                $("#status").text("Chờ thăm khám");
+            }
+        });
+
+        const baseUrl = "/admin/record";
+        // Valid
+        const fields = {
+            DiseaseName: {
+                container: 'tooltip',
+                validators: {
+                    notEmpty: {
+                        message: 'Tên không được để trống!'
+                    }
+                }
+            }
+        }
+
+        validator.valid('modal-form',
+            fields,
+            (e) => {
+                e.preventDefault();
+
+                var formData = new FormData(document.getElementById('modal-form'));
+                const isChecked = $("#demo-allow-comments").is(":checked");
+                formData.set("Status", isChecked);
+                ajax.createOrUpdate(`${baseUrl}/CreateOrEdit`,
+                    formData,
+                    (response) => {
+                        if (response.status) {
+                            notify.push(response.mess, notify.EType.SUCCESS);
+                            notify.loading();
+                            $('#data-modal').modal('hide');
+
+                            const type = $('#type').val();
+                            switch (type) {
+                            case 1: //file
+                                window.location.href = `/admin/Attachment?detailRecordId=${response.data.detailRecordId}`;
+                                break;
+                            case 2: //medical
+                                window.location.href = `/admin/Prescription?detailRecordId=${response.data.detailRecordId}`;
+                                break;
+                            case 0:
+                                window.location.reload();
+                                break;
+                            default:
+                                window.location.reload();
+                            }
+
+                        } else {
+                            notify.push(response.mess, notify.EType.DANGER);
+                            $(':input[type="submit"]').prop("disabled", false);
+                        }
+                    },
+                    (jqXhr, textStatus) => {
+                        const mess = `Request failed: ${textStatus}`;
+                        notify.push(mess, notify.EType.DANGER);
+                        $(':input[type="submit"]').prop("disabled", false);
+                    }
+                );
+            });
+
+        validator.valid('form-record',
+            fields,
+            (e) => {
+                e.preventDefault();
+                notify.loading();
+                var formData = new FormData(document.getElementById('form-record'));
+                ajax.createOrUpdate(`${baseUrl}/UpdateRecord`,
+                    formData,
+                    (response) => {
+                        if (response.status) {
+                            notify.push(response.mess, notify.EType.SUCCESS);
+                            notify.done();
+                        } else {
+                            notify.push(response.mess, notify.EType.DANGER);
+                            notify.done();
+                            $(':input[type="submit"]').prop("disabled", false);
+                        }
+                    },
+                    (jqXhr, textStatus) => {
+                        const mess = `Request failed: ${textStatus}`;
+                        notify.done();
+                        notify.push(mess, notify.EType.DANGER);
+                        $(':input[type="submit"]').prop("disabled", false);
+                    }
+                );
+            });
+
+        function saveRecord() {
+            $("#form-record").submit();
+        }
+
+        function saveDetailRecord(type) {
+            switch (type) {
+            case 1:
+                $("#type").val("1");
+                break;
+            case 2:
+                $("#type").val("2");
+                break;
+            case 0:
+                $("#type").val("0");
+                break;
+            default:
+                $("#type").val("0");
+            }
+            $("#modal-form").submit();
+        }
+
+        function openRedirect(isFile,id) {
+            if (isFile) {
+                window.location.href = `/admin/Attachment?detailRecordId=${id}`;
+            } else {
+                window.location.href = `/admin/Prescription?detailRecordId=${id}`;
+            }
+        }
+        function assignItem(id) {
+                window.location.href = `MedicalSupply?patientId=${id}`;
+        }
+
+        //Edit
+        function openModal(isEdit, id) {
+            $('#modal-form')[0].reset();
+            if (!isEdit) {
+                $('#modal-form input[name="isEdit"]').val(false);
+                $('#modal-form input[name="Id"]').val("");
+                $('#data-modal').modal('show');
+
+                return;
+            }
+            $(".edit-modal").show();
+            ajax.get(`${baseUrl}/GetJson`,
+                { id: id },
+                (response) => {
+                    if (response.status) {
+                        const obj = response.data;
+                        $('#modal-form input[name="Process"]').val(obj.Process);
+                        $('#modal-form textarea[name="Note"]').val(obj.Note);
+                        $('#modal-form textarea[name="Result"]').val(obj.Result);
+                        $('#modal-form input[name="DiseaseName"]').val(obj.DiseaseName);
+                        $("#FacultyId").val(obj.FacultyId);
+                        $('#FacultyId').select2().trigger('change');
+                        $("#DetailDoctorId").val(obj.DoctorId);
+                        $('#DetailDoctorId').select2().trigger('change');
+                        $('#modal-form input[name="Status"]').prop('checked', obj.Status);
+                        if (obj.Status) {
+                            $("#status").text("Đã thăm khám");
+                        } else {
+                            $("#status").text("Chờ thăm khám");
+                        }
+
+                        $('#modal-form input[name="Id"]').val(obj.Id);
+                        $('#modal-form input[name="isEdit"]').val(true);
+                        $('#data-modal').modal('show');
+                    } else {
+                        notify.push(response.mess, notify.EType.DANGER);
+                    }
+                },
+                (jqXhr, textStatus) => {
+                    const mess = `Request failed: ${textStatus}`;
+                    notify.push(mess, notify.EType.DANGER);
+                }
+            );
+        }
+
+        //Del
+        function deleteElement(_id, name) {
+            var mess = `Xác nhận <b>xóa</b> bản ghi <b>${name}</b>`;
+            bootbox.confirm(mess,
+                function(result) {
+                    if (result) {
+                        ajax.del(`${baseUrl}/del`,
+                            { id: _id },
+                            (response) => {
+                                if (response.status) {
+                                    notify.push(response.mess, notify.EType.SUCCESS);
+                                    $(`#row_${_id}`).remove();
+                                } else {
+                                    notify.push(mess, notify.EType.DANGER);
+                                }
+                            },
+                            (jqXhr, textStatus) => {
+                                const mess = `Request failed: ${textStatus}`;
+                                notify.push(mess, notify.EType.DANGER);
+
+                            }
+                        );
+                    }
+                });
+        }
+    </script>
+}

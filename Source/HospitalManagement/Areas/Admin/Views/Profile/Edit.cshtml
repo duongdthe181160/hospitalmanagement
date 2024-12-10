@@ -1,0 +1,179 @@
+﻿@using BELibrary.Core.Utils
+@using BELibrary.Entity
+@using BELibrary.Utils
+@model Account
+@{
+    ViewBag.Title = ViewBag.Feature + " " + Model.FullName;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section CSS{
+
+    <style>
+        .select2-container {
+            z-index: 99999;
+            width: 100% !important;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+
+                <h3 class="panel-title">@ViewBag.Element</h3>
+            </div>
+            <div class="panel-body" style="width: 50%;
+                                           margin: auto">
+                <form id="form">
+                    <div class="text-center">
+                        <a href="#">
+                            <img alt="Profile Picture" class="img-lg img-circle mar-ver" src="@Model.LinkAvatar" id="ImgAvt">
+                            <p class="text-lg text-semibold mar-no text-main">@(string.IsNullOrEmpty(Model.FullName) ? "~/FileUploads/images/avatas/doctor.jpg" : Model.FullName)</p>
+                            <input type="hidden" value="@Model.LinkAvatar" name="LinkAvatar" id="Avatar" />
+                        </a>
+                        <button style="margin-top: 5px" class=" btn btn-primary btn-labeled fa fa-paperclip  fa-sm btn-sm" onclick="chooseImgAvatar()" type="button">Change</button>
+                    </div>
+                    <div id="post" class="tab-pane fade active in">
+                        <div class="panel">
+                            <div class="panel-body">
+                                <div class="row">
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Tên đăng nhập</label>
+                                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @readonly = true, @autocomplete = "off", @class = "form-control", @required = "required", @maxlength = 250 } })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Tên đầy đủ</label>
+                                            @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control", @required = "required", @maxlength = 250 } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Giới tính</label>
+                                            @Html.DropDownList("Gender", (SelectList)ViewBag.Genders, "---Select---", new { @class = "form-control", @required = "required" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Phone</label>
+                                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", @required = "required", @maxlength = 250 } })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (Model.Role == RoleKey.Doctor)
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label class="control-label">Khoa</label>
+                                                @Html.DropDownList("FacultyId", (SelectList)ViewBag.Faculties,
+                                                    new { @class = "form-control", @required = "required" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                                <hr />
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Mật khẩu</label>
+                                    <div class="col-lg-9 input-group mar-btm">
+                                        <input type="password" autocomplete="new-password" class="form-control" name="Password" placeholder="Mật khẩu">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Nhập lại mật khẩu</label>
+                                    <div class="col-lg-9 input-group mar-btm">
+                                        <input type="password" class="form-control" autocomplete="off" name="RePassword" placeholder="Nhập lại mật khẩu">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a class="btn btn-default btn-icon icon-lg fa fa-arrow-left fa-lg" href="/admin/account?role=@ViewBag.Role"></a>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button class="btn btn-success btn-labeled fa fa-send fa-lg btn-save" style="float: right;" type="submit">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Script-->
+@section Scripts {
+    <!--DataTables [ OPTIONAL ]-->
+
+    <script>
+        $(document).ready(function () {
+            $("#FacultyId").select2();
+        });
+
+        const baseUrl = "/admin/profile";
+        // Valid
+        const fields = {
+            Name: {
+                container: 'tooltip',
+                validators: {
+                    notEmpty: {
+                        message: 'Tên không được để trống!'
+                    }
+                }
+            }
+        }
+
+        validator.valid('form',
+            fields,
+            (e) => {
+                e.preventDefault();
+
+                var formData = new FormData(document.getElementById('form'));
+
+                ajax.createOrUpdate(`${baseUrl}/UpdateInfo`,
+                    formData,
+                    (response) => {
+                        if (response.status) {
+                            notify.push(response.mess, notify.EType.SUCCESS);
+                            notify.loading();
+                            setTimeout(function () {
+                                window.location.href = baseUrl;
+                            }, 500);
+
+                        } else {
+                            notify.push(response.mess, notify.EType.DANGER);
+                            $(':input[type="submit"]').prop("disabled", false);
+                        }
+                    },
+                    (jqXhr, textStatus) => {
+                        const mess = `Request failed: ${textStatus}`;
+                        notify.push(mess, notify.EType.DANGER);
+                        $(':input[type="submit"]').prop("disabled", false);
+                    }
+                );
+            });
+
+        function chooseImgAvatar() {
+            const finder = new CKFinder();
+            finder.selectActionFunction = function (fileUrl) {
+                $("#ImgAvt").attr("src", fileUrl);
+                $("#Avatar").val(fileUrl);
+            }
+            finder.popup();
+        }
+    </script>
+}

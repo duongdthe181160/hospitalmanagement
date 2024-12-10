@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from doccure-html.dreamguystech.com/template/admin/tables-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 10 Aug 2021 14:11:20 GMT -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+<title>Doccure - Tables Basic</title>
+
+<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="assets/css/feathericon.min.css">
+
+<link rel="stylesheet" href="assets/css/style.css">
+<!--[if lt IE 9]>
+			<script src="assets/js/html5shiv.min.js"></script>
+			<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+</head>
+<body>
+
+<div class="main-wrapper">
+
+<div class="header">
+
+<div class="header-left">
+<a href="index.html" class="logo">
+<img src="assets/img/logo.png" alt="Logo">
+</a>
+<a href="index.html" class="logo logo-small">
+<img src="assets/img/logo-small.png" alt="Logo" width="30" height="30">
+</a>
+</div>
+
+<a href="javascript:void(0);" id="toggle_btn">
+<i class="fe fe-text-align-left"></i>
+</a>
+<div class="top-nav-search">
+<form>
+<input type="text" class="form-control" placeholder="Search here">
+<button class="btn" type="submit"><i class="fa fa-search"></i></button>
+</form>
+</div>
+
+<a class="mobile_btn" id="mobile_btn">
+<i class="fa fa-bars"></i>
+</a>
+
+
+<ul class="nav user-menu">
+
+<li class="nav-item dropdown noti-dropdown">
+<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+<i class="fe fe-bell"></i> <span class="badge badge-pill">3</span>
+</a>
+<div class="dropdown-menu notifications">
+<div class="topnav-dropdown-header">
+<span class="notification-title">Notifications</span>
+<a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+</div>
+<div class="noti-content">
+<ul class="notification-list">
+<li class="notification-message">
+<a href="#">
+<div class="media">
+<span class="avatar avatar-sm">
+<img class="avatar-img rounded-circle" alt="User Image" src="assets/img/doctors/doctor-thumb-01.jpg">
+</span>
+<div class="media-body">
+<p class="noti-details"><span class="noti-title">Dr. Ruby Perrin</span> Schedule <span class="noti-title">her appointment</span></p>
+<p class="noti-time"><span class="notification-time">4 mins ago</span></p>
+</div>
+</div>
+</a>
+</li>
+<li class="notification-message">
+<a href="#">
+<div class="media">
+<span class="avatar avatar-sm">
+<img class="avatar-img rounded-circle" alt="User Image" src="assets/img/patients/patient1.jpg">
+</span>
+<div class="media-body">
+<p class="noti-details"><span class="noti-title">Charlene Reed</span> has booked her appointment to <span class="noti-title">Dr. Ruby Perrin</span></p>
+<p class="noti-time"><span class="notification-time">6 mins ago</span></p>
+</div>
+</div>
+</a>
+</li>
+<li class="notification-message">
+<a href="#">
+<div class="media">
+<span class="avatar avatar-sm">
+<img class="avatar-img rounded-circle" alt="User Image" src="assets/img/patients/patient2.jpg">
+</span>
+<div class="media-body">
+<p class="noti-details"><span class="noti-title">Travis Trimble</span> sent a amount of $210 for his <span class="noti-title">appointment</span></p>
+<p class="noti-time"><span class="notification-time">8 mins ago</span></p>
+</div>
+</div>
+</a>
+</li>
+<li class="notification-message">
+<a href="#">
+<div class="media">
+<span class="avatar avatar-sm">
+<img class="avatar-img rounded-circle" alt="User Image" src="assets/img/patients/patient3.jpg">
+</span>
+<div class="media-body">
+<p class="noti-details"><span class="noti-title">Carl Kelly</span> send a message <span class="noti-title"> to his doctor</span></p>
+<p class="noti-time"><span class="notification-time">12 mins ago</span></p>
+</div>
+</div>
+</a>
+</li>
+</ul>
+</div>
+<div class="topnav-dropdown-footer">
+<a href="#">View all Notifications</a>
+</div>
+</div>
+</li>
+
+
+<li class="nav-item dropdown has-arrow">
+<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+<span class="user-img"><img class="rounded-circle" src="assets/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor"></span>
+</a>
+<div class="dropdown-menu">
+<div class="user-header">
+<div class="avatar avatar-sm">
+<img src="assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+</div>
+<div class="user-text">
+<h6>Ryan Taylor</h6>
+<p class="text-muted mb-0">Administrator</p>
+</div>
+</div>
+<a class="dropdown-item" href="profile.html">My Profile</a>
+<a class="dropdown-item" href="settings.html">Settings</a>
+<a class="dropdown-item" href="login.html">Logout</a>
+</div>
+</li>
+
+</ul>
+
+</div>
+
+
+<div class="sidebar" id="sidebar">
+<div class="sidebar-inner slimscroll">
+<div id="sidebar-menu" class="sidebar-menu">
+<ul>
+<li class="menu-title">
+<span>Main</span>
+</li>
+<li>
+<a href="index.html"><i class="fe fe-home"></i> <span>Dashboard</span></a>
+</li>
+<li>
+<a href="appointment-list.html"><i class="fe fe-layout"></i> <span>Appointments</span></a>
+</li>
+<li>
+<a href="specialities.html"><i class="fe fe-users"></i> <span>Specialities</span></a>
+</li>
+<li>
+<a href="doctor-list.html"><i class="fe fe-user-plus"></i> <span>Doctors</span></a>
+</li>
+<li>
+<a href="patient-list.html"><i class="fe fe-user"></i> <span>Patients</span></a>
+</li>
+<li>
+<a href="reviews.html"><i class="fe fe-star-o"></i> <span>Reviews</span></a>
+</li>
+<li>
+<a href="transactions-list.html"><i class="fe fe-activity"></i> <span>Transactions</span></a>
+</li>
+<li>
+<a href="settings.html"><i class="fe fe-vector"></i> <span>Settings</span></a>
+</li>
+<li class="submenu">
+<a href="#"><i class="fe fe-document"></i> <span> Reports</span> <span class="menu-arrow"></span></a>
+<ul style="display: none;">
+<li><a href="invoice-report.html">Invoice Reports</a></li>
+</ul>
+</li>
+<li class="menu-title">
+<span>Pages</span>
+</li>
+<li class="submenu">
+<a href="#"><i class="fe fe-document"></i> <span> Blog </span> <span class="menu-arrow"></span></a>
+<ul style="display: none;">
+<li><a href="blog.html"> Blog </a></li>
+<li><a href="blog-details.html"> Blog Details</a></li>
+<li><a href="add-blog.html"> Add Blog </a></li>
+<li><a href="edit-blog.html"> Edit Blog </a></li>
+</ul>
+</li>
+<li><a href="product-list.html"><i class="fe fe-layout"></i> <span>Product List</span></a></li>
+<li><a href="pharmacy-list.html"><i class="fe fe-vector"></i> <span>Pharmacy List</span></a></li>
+<li>
+<a href="profile.html"><i class="fe fe-user-plus"></i> <span>Profile</span></a>
+</li>
+<li class="submenu">
+<a href="#"><i class="fe fe-document"></i> <span> Authentication </span> <span class="menu-arrow"></span></a>
+<ul style="display: none;">
+<li><a href="login.html"> Login </a></li>
+<li><a href="register.html"> Register </a></li>
+<li><a href="forgot-password.html"> Forgot Password </a></li>
+<li><a href="lock-screen.html"> Lock Screen </a></li>
+</ul>
+</li>
+<li class="submenu">
+<a href="#"><i class="fe fe-warning"></i> <span> Error Pages </span> <span class="menu-arrow"></span></a>
+<ul style="display: none;">
+<li><a href="error-404.html">404 Error </a></li>
+<li><a href="error-500.html">500 Error </a></li>
+</ul>
+</li>
+<li>
+<a href="blank-page.html"><i class="fe fe-file"></i> <span>Blank Page</span></a>
+</li>
+<li class="menu-title">
+<span>UI Interface</span>
+</li>
+<li>
+<a href="components.html"><i class="fe fe-vector"></i> <span>Components</span></a>
+</li>
+<li class="submenu">
+<a href="#"><i class="fe fe-layout"></i> <span> Forms </span> <span class="menu-arrow"></span></a>
+<ul style="display: none;">
+<li><a href="form-basic-inputs.html">Basic Inputs </a></li>
+<li><a href="form-input-groups.html">Input Groups </a></li>
+<li><a href="form-horizontal.html">Horizontal Form </a></li>
+<li><a href="form-vertical.html"> Vertical Form </a></li>
+<li><a href="form-mask.html"> Form Mask </a></li>
+<li><a href="form-validation.html"> Form Validation </a></li>
+</ul>
+</li>
+<li class="submenu">
+<a href="#"><i class="fe fe-table"></i> <span> Tables </span> <span class="menu-arrow"></span></a>
+<ul style="display: none;">
+<li><a class="active" href="tables-basic.html">Basic Tables </a></li>
+<li><a href="data-tables.html">Data Table </a></li>
+</ul>
+</li>
+<li class="submenu">
+<a href="javascript:void(0);"><i class="fe fe-code"></i> <span>Multi Level</span> <span class="menu-arrow"></span></a>
+<ul style="display: none;">
+<li class="submenu">
+<a href="javascript:void(0);"> <span>Level 1</span> <span class="menu-arrow"></span></a>
+<ul style="display: none;">
+<li><a href="javascript:void(0);"><span>Level 2</span></a></li>
+<li class="submenu">
+<a href="javascript:void(0);"> <span> Level 2</span> <span class="menu-arrow"></span></a>
+<ul style="display: none;">
+<li><a href="javascript:void(0);">Level 3</a></li>
+<li><a href="javascript:void(0);">Level 3</a></li>
+</ul>
+</li>
+<li><a href="javascript:void(0);"> <span>Level 2</span></a></li>
+</ul>
+</li>
+<li>
+<a href="javascript:void(0);"> <span>Level 1</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+
+<div class="page-header">
+<div class="row">
+<div class="col">
+<h3 class="page-title">Basic Tables</h3>
+<ul class="breadcrumb">
+<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+<li class="breadcrumb-item active">Basic Tables</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-lg-6">
+<div class="card">
+<div class="card-header">
+<h4 class="card-title">Basic Table</h4>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table mb-0">
+<thead>
+<tr>
+<th>Firstname</th>
+<th>Lastname</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>John</td>
+<td>Doe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fb91949395bb9e839a968b979ed5989496">[email&#160;protected]</a></td>
+</tr>
+<tr>
+<td>Mary</td>
+<td>Moe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="670a06151e27021f060a170b024904080a">[email&#160;protected]</a></td>
+</tr>
+<tr>
+<td>July</td>
+<td>Dooley</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="93f9e6ffead3f6ebf2fee3fff6bdf0fcfe">[email&#160;protected]</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="card">
+<div class="card-header">
+<h4 class="card-title">Striped Rows</h4>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-striped mb-0">
+<thead>
+<tr>
+<th>Firstname</th>
+<th>Lastname</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>John</td>
+<td>Doe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="442e2b2c2a04213c25293428216a272b29">[email&#160;protected]</a></td>
+</tr>
+<tr>
+<td>Mary</td>
+<td>Moe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b3ded2c1caf3d6cbd2dec3dfd69dd0dcde">[email&#160;protected]</a></td>
+</tr>
+<tr>
+<td>July</td>
+<td>Dooley</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="48223d2431082d30292538242d662b2725">[email&#160;protected]</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-lg-6">
+<div class="card">
+<div class="card-header">
+<h4 class="card-title">Bordered Table</h4>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-bordered mb-0">
+<thead>
+<tr>
+<th>Firstname</th>
+<th>Lastname</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>John</td>
+<td>Doe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a8c2c7c0c6e8cdd0c9c5d8c4cd86cbc7c5">[email&#160;protected]</a></td>
+</tr>
+<tr>
+<td>Mary</td>
+<td>Moe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="85e8e4f7fcc5e0fde4e8f5e9e0abe6eae8">[email&#160;protected]</a></td>
+</tr>
+<tr>
+<td>July</td>
+<td>Dooley</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2248574e5b62475a434f524e470c414d4f">[email&#160;protected]</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="card">
+<div class="card-header">
+<h4 class="card-title">Hover Rows</h4>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-hover mb-0">
+<thead>
+<tr>
+<th>Firstname</th>
+<th>Lastname</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>John</td>
+<td>Doe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="95fffafdfbd5f0edf4f8e5f9f0bbf6faf8">[email&#160;protected]</a></td>
+</tr>
+<tr>
+<td>Mary</td>
+<td>Moe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="264b47545f66435e474b564a430845494b">[email&#160;protected]</a></td>
+</tr>
+<tr>
+<td>July</td>
+<td>Dooley</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="81ebf4edf8c1e4f9e0ecf1ede4afe2eeec">[email&#160;protected]</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-lg-6"> 
+<div class="card">
+<div class="card-header">
+<h4 class="card-title">Contextual Classes</h4>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table mb-0">
+<thead>
+<tr>
+<th>Firstname</th>
+<th>Lastname</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default</td>
+<td>Defaultson</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5531303315263a383038343c397b363a38">[email&#160;protected]</a></td>
+</tr>
+<tr class="table-primary">
+<td>Primary</td>
+<td>Doe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="066c696e6846637e676b766a632865696b">[email&#160;protected]</a></td>
+</tr>
+<tr class="table-secondary">
+<td>Secondary</td>
+<td>Moe</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a8c5c9dad1e8cdd0c9c5d8c4cd86cbc7c5">[email&#160;protected]</a></td>
+</tr>
+<tr class="table-success">
+<td>Success</td>
+<td>Dooley</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d8b2adb4a198bda0b9b5a8b4bdf6bbb7b5">[email&#160;protected]</a></td>
+</tr>
+<tr class="table-danger">
+<td>Danger</td>
+<td>Refs</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="66040926031e070b160a034805090b">[email&#160;protected]</a></td>
+</tr>
+<tr class="table-warning">
+<td>Warning</td>
+<td>Activeson</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5332302713362b323e233f367d303c3e">[email&#160;protected]</a></td>
+</tr>
+<tr class="table-info">
+<td>Info</td>
+<td>Activeson</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4e2f2d3a0e2b362f233e222b602d2123">[email&#160;protected]</a></td>
+</tr>
+<tr class="table-light">
+<td>Light</td>
+<td>Activeson</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a2b293e0a2f322b273a262f64292527">[email&#160;protected]</a></td>
+</tr>
+<tr class="table-dark">
+<td>Dark</td>
+<td>Activeson</td>
+<td><a href="https://doccure-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a4c5c7d0e4c1dcc5c9d4c8c18ac7cbc9">[email&#160;protected]</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="card">
+<div class="card-header">
+<h4 class="card-title">Responsive Tables</h4>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-nowrap mb-0">
+<thead>
+<tr>
+<th>#</th>
+<th>Firstname</th>
+<th>Lastname</th>
+<th>Age</th>
+<th>City</th>
+<th>Country</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Anna</td>
+<td>Pitt</td>
+<td>35</td>
+<td>New York</td>
+<td>USA</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Anna</td>
+<td>Pitt</td>
+<td>35</td>
+<td>New York</td>
+<td>USA</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Anna</td>
+<td>Pitt</td>
+<td>35</td>
+<td>New York</td>
+<td>USA</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Anna</td>
+<td>Pitt</td>
+<td>35</td>
+<td>New York</td>
+<td>USA</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Anna</td>
+<td>Pitt</td>
+<td>35</td>
+<td>New York</td>
+<td>USA</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Anna</td>
+<td>Pitt</td>
+<td>35</td>
+<td>New York</td>
+<td>USA</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Anna</td>
+<td>Pitt</td>
+<td>35</td>
+<td>New York</td>
+<td>USA</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Anna</td>
+<td>Pitt</td>
+<td>35</td>
+<td>New York</td>
+ <td>USA</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Anna</td>
+<td>Pitt</td>
+<td>35</td>
+<td>New York</td>
+<td>USA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+
+<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/jquery-3.2.1.min.js"></script>
+
+<script src="assets/js/popper.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+
+<script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<script src="assets/js/script.js"></script>
+</body>
+
+<!-- Mirrored from doccure-html.dreamguystech.com/template/admin/tables-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 10 Aug 2021 14:11:20 GMT -->
+</html>

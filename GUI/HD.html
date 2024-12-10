@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi" style=""
+    class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface no-generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Quản lý bệnh nhân">
+    <meta name="author" content="Ansonika">
+    <title>Hướng dẫn | Quản lý bệnh nhân</title>
+
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="https://sauanla.com/wp-content/uploads/2020/06/ico-logo-sauanla2-300x245.png"
+        type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon"
+        href="https://sauanla.com/wp-content/uploads/2020/06/Black-logo-sauanla.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72"
+        href="https://sauanla.com/wp-content/uploads/2020/06/Black-logo-sauanla.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
+        href="https://sauanla.com/wp-content/uploads/2020/06/Black-logo-sauanla.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
+        href="https://sauanla.com/wp-content/uploads/2020/06/Black-logo-sauanla.png">
+
+    <!-- GOOGLE WEB FONT -->
+    <link href="./HD_files/css.css" rel="stylesheet">
+
+    <!-- BASE CSS -->
+    <link href="./HD_files/bootstrap.min.css" rel="stylesheet">
+    <link href="./HD_files/menu.css" rel="stylesheet">
+    <link href="./HD_files/style.css" rel="stylesheet">
+    <link href="./HD_files/vendors.css" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="./HD_files/custom.css" rel="stylesheet">
+
+    <!-- MODERNIZR MENU -->
+    <script src="./HD_files/modernizr.js"></script>
+    <style>
+        .hide {
+            display: none !important;
+        }
+    </style>
+
+</head>
+
+<body data-gr-c-s-loaded="true" style="overflow: visible;">
+
+    <div id="preloader" style="display: none;">
+        <div data-loader="circle-side" style="display: none;"></div>
+    </div><!-- /Preload -->
+
+    <div id="loader_form">
+        <div data-loader="circle-side-2"></div>
+    </div><!-- /loader_form -->
+
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-xs-12">
+                    <a href="https://sauanla.com"><img
+                            src="https://sauanla.com/wp-content/uploads/2020/06/Black-logo-sauanla.png" alt=""
+                            height="50" class="d-none d-md-block"><img
+                            src="https://sauanla.com/wp-content/uploads/2020/06/Black-logo-sauanla.png" height="90"
+                            class="d-block d-md-none"></a>
+                </div>
+            </div>
+        </div>
+        <!-- /container -->
+    </header>
+    <!-- /Header -->
+
+    <div class="container">
+        <div id="form_container">
+            <div class="row no-gutters">
+                <div class="col-lg-4">
+                    <div id="left_form">
+                        <figure><img src="./HD_files/info_graphic_1.svg" alt="" width="100" height="100"></figure>
+                        <h2>Quản lý bệnh nhân <span>Health Questionnaire</span></h2>
+                        <a href="https://sauanla.com" class="btn_1 rounded yellow purchase" target="_parent">Website</a>
+                        <a href="https://sauanla.com" target="_blank"
+                            class="btn_1 rounded mobile_btn yellow">Facebook</a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div id="wizard_container" class="wizard" novalidate="novalidate">
+                        <div id="top-wizard">
+                            <div id="progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all"
+                                role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                <div class="ui-progressbar-value ui-widget-header ui-corner-left"
+                                    style="display: none; width: 0%;"></div>
+                            </div>
+                            <span id="location"></span>
+                        </div>
+                        <!-- /top-wizard -->
+                        <form id="wrapped" method="GET" class="fl-form fl-style-1 wizard-form"
+                            action="https://sauanla.com">
+                            <input id="website" name="website" type="text" value="">
+                            <!-- Leave for security protection, read docs for details -->
+                            <div id="middle-wizard" class="wizard-branch wizard-wrapper">
+
+                                <div class="step wizard-step current" style="">
+                                    <h3 class="main_question wizard-header"><i class="arrow_right"></i>Sửa file config -
+                                        Cơ sở dữ liệu</h3>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <a href="HD_files/connection-string.png" target="_blank"> <img
+                                                    title="Click to view" class="img img-responsive"
+                                                    style="width: 100%;" src="./HD_files/connection-string.png" /></a>
+                                        </div>
+                                    </div>
+                                    <!-- /row -->
+                                </div>
+                                <!-- /step-->
+
+                                <!-- /Start Branch ============================== -->
+                                <div class="step" data-state="branchtype">
+                                    <label class="custom add_top_10"></label>
+                                    <h3 class="main_question"><i class="arrow_right"></i>Bạn muốn database có dữ liệu ?
+                                    </h3>
+                                    <div class="form-group">
+                                        <label class="container_radio version_2">Vâng
+                                            <input type="radio" name="question_3" value="Yes" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio version_2">Không
+                                            <input type="radio" name="question_3" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <small>* Vui lòng chọn 1 </small>
+                                </div>
+
+                                <!-- /step-->
+
+                                <!-- /difficulty in breathing > Yes ============================== -->
+                                <div class="branch wizard-branch" id="Yes">
+                                    <div class="step wizard-step" data-state="No" style="display: none;">
+                                        <h3 class="main_question"><i class="arrow_right"></i>Import cơ sở dữ liệu từ
+                                            file Script Or file Bak</h3>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <a href="HD_files/Sql-backup.png" target="_blank"> <img
+                                                        title="Click to view" class="img img-responsive"
+                                                        style="width: 100%;" src="./HD_files/Sql-backup.png" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /step-->
+
+                                <!-- /difficulty in breathing > No ============================== -->
+                                <div class="step wizard-step" id="No" style="display: none;">
+                                    <div id="use-migration">
+                                        <h3 class="main_question"><i class="arrow_right"></i>Sử dụng Migration db</h3>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <a href="HD_files/Select_Project.png" target="_blank"> <img
+                                                        title="Click to view" class="img img-responsive"
+                                                        style="width: 100%;" src="./HD_files/Select_Project.png" /></a>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <a href="HD_files/Update-database.png" target="_blank"> <img
+                                                        title="Click to view" class="img img-responsive"
+                                                        style="width: 100%;" src="./HD_files/Update-database.png" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="import">
+                                        <h3 class="main_question"><i class="arrow_right"></i>Import database</h3>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <a href="HD_files/Import-Bak-file.png" target="_blank"> <img
+                                                        title="Click to view" class="img img-responsive"
+                                                        style="width: 100%;" src="./HD_files/Import-Bak-file.png" /></a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /step-->
+
+                                <div class="submit step" id="end">
+                                    <h3 class="main_question"><i class="arrow_right"></i>Đăng nhập admin</h3>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <a href="HD_files/Login-Admin.png" target="_blank"> <img
+                                                    title="Click to view" class="img img-responsive"
+                                                    style="width: 100%;" src="./HD_files/Login-Admin.png" /></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /step-->
+
+                            </div>
+                            <!-- /middle-wizard -->
+                            <div id="bottom-wizard">
+                                <button type="button" name="backward" class="backward" disabled="disabled">Lùi</button>
+                                <button type="button" name="forward" class="forward">Tiếp</button>
+                                <button type="submit" name="process" class="submit" disabled="disabled">Xong</button>
+                            </div>
+                            <!-- /bottom-wizard -->
+                        </form>
+                    </div>
+                    <!-- /Wizard container -->
+                </div>
+            </div><!-- /Row -->
+        </div><!-- /Form_container -->
+    </div>
+    <!-- /container -->
+
+    <div class="container">
+        <footer id="home" class="clearfix">
+            <p>© 2020 Đình Phúc</p>
+            <ul>
+                <li><a href="https://fb.com/100004574107394" class="animated_link" target="_parent">Facebook</a></li>
+                <li><a href="tel:0973642632" class="animated_link">Phone</a></li>
+                <li><a href="https://sauanla.com" class="animated_link">website</a></li>
+            </ul>
+        </footer>
+        <!-- end footer-->
+    </div>
+    <!-- /container -->
+
+    <div class="cd-overlay-nav">
+        <span class=""
+            style="transform: scaleX(0) scaleY(0); height: 3309.99px; width: 3309.99px; top: -1655px; left: -1655px;"></span>
+    </div>
+    <!-- /cd-overlay-nav -->
+    <div class="cd-overlay-content">
+        <span class=""
+            style="transform: scaleX(0) scaleY(0); height: 3309.99px; width: 3309.99px; top: -1655px; left: -1655px;"></span>
+    </div>
+
+    <!-- COMMON SCRIPTS -->
+    <script src="./HD_files/jquery-3.2.1.min.js"></script>
+    <script src="./HD_files/common_scripts.min.js"></script>
+
+    <!-- Wizard script-->
+    <script src="./HD_files/func_1.js"></script>
+    <script src="./HD_files/event.js"></script>
+
+
+</body>
+
+</html>

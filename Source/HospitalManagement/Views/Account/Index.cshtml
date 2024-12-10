@@ -1,0 +1,208 @@
+﻿@using HospitalManagement.Handler
+@using BELibrary.Entity
+
+@{
+    ViewBag.Title = "Trang cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = CookiesManage.GetUser();
+}
+
+@model List<PatientRecord>
+@{
+    ViewBag.Title = "Create";
+    var patient = (Patient)ViewBag.Patient ?? new Patient();
+    var record = (Record)ViewBag.Record ?? new Record();
+
+    var result = record.Result;
+    var note = record.Note;
+}
+
+@section CSS
+{
+
+    <style>
+        .fa {
+            margin-right: 10px;
+        }
+
+        .bg-black-333 {
+            background-color: darkseagreen;
+            margin-top: 10px;
+            padding-top: 10px;
+            padding-bottom: 32px;
+            color: white;
+        }
+
+        .full-name {
+            padding-top: 12px;
+            color: white;
+        }
+
+        .styled-icons li {
+            display: inline-block;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        .styled-icons.icon-sm a {
+            font-size: 13px;
+            height: 30px;
+            line-height: 30px;
+            margin: 2px 7px 2px 0;
+            width: 30px;
+        }
+
+        .styled-icons.icon-circled a {
+            border-radius: 50%;
+        }
+
+        .styled-icons.icon-gray a {
+            background-color: #eeeeee;
+            color: #555555;
+            display: block;
+            font-size: 18px;
+            height: 36px;
+            line-height: 36px;
+            width: 36px;
+        }
+
+        .mb-15 {
+            margin-bottom: 15px !important;
+        }
+
+        .mt-15 {
+            margin-top: 15px !important;
+        }
+
+        ul, ol {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .fa {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+}
+<!-- Start main-content -->
+<!-- Section: inner-header -->
+<!-- Section: Doctor Details -->
+<section class="container">
+    <div class="breadcrumb-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-8 col-12">
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Account</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-body">
+            <div class="fixed-fluid" style="font-family: roboto;">
+                <div class="fixed-md-200 pull-sm-left fixed-right-border">
+                    @if (patient.Id != Guid.Empty)
+                    {
+                        <!-- Simple profile -->
+                        <div class="text-center">
+                            <div class="pad-ver">
+                                <img src="@(string.IsNullOrEmpty(patient.ImageProfile) ? "/Areas/Admin/Content/img/profile-photos/1.png" : patient.ImageProfile)" class="img-lg img-circle  w-100" alt="Profile Picture">
+                            </div>
+                            <h4 class="text-lg text-overflow mar-no">@patient.FullName</h4>
+                            <p class="text-sm text-muted">@patient.Job</p>
+
+                            <a class="btn btn-block btn-success btn-lg disable" href="/account/edit">Sửa thông tin</a>
+                        </div>
+                        <hr>
+
+                        <!-- Profile Details -->
+                        <p class="pad-ver text-main text-sm text-uppercase text-bold">Thông tin</p>
+                        <p><i class="fa fa-code icon-lg icon-fw"></i> <label class="label label-success" style="font-size: 12px;">@patient.PatientCode</label> </p>
+                        <p><i class="fa fa-map-marker icon-lg icon-fw"></i> @patient.Address</p>
+                        <p><a href="#" class="btn-link"><i class="fa fa-tags icon-lg icon-fw"></i> @patient.DateOfBirth.ToString("dd/MM/yyyy")</a></p>
+                        <p><i class="fa fa-phone icon-lg icon-fw"></i> @patient.Phone</p>
+                    }
+                    else
+                    {
+
+                        <!-- Profile Details -->
+                        <p class="pad-ver text-main text-sm text-uppercase text-bold">Chưa có thông tin bệnh nhân</p>
+                    }
+                </div>
+                <div class="fluid">
+                    <div class="fixed-fluid">
+                        <div class="fluid">
+                            @if (patient.Id != Guid.Empty)
+                            {
+
+                                <div class="form-group text-center">
+                                    <h3> Bệnh án - Bệnh nhân: @patient.FullName</h3>
+                                </div>
+
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">STT</th>
+                                                        <th class="text-center">Tiêu đề </th>
+                                                        <th class="text-center">Ngày đăng ký</th>
+                                                        <th class="text-center">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.Select((value, index) => new { index = (index + 1), value }))
+                                                    {
+                                                        <tr id="row_@item.value.Id">
+                                                            <td class="text-center"><a class="btn-link" href="#">@item.index</a></td>
+                                                            <td class="text-center">@item.value.Title</td>
+
+                                                            <td class="text-center">@item.value.TestDate.ToString("dd/MM/yyyy HH:mm") </td>
+                                                            <td class="text-center">
+                                                                <button class="btn btn-info" title="Chi tiết" onclick="openRedirect('@item.value.Id')">
+                                                                    Xem
+                                                                    <i class="fa fa-eye icon-sm" style="margin-right: 0px;"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center " style="padding-bottom: 20px">
+            <button class="btn btn-primary" onclick="window.history.back()"> Quay lại</button>
+        </div>
+    </div>
+</section>
+
+<!-- end main-content -->
+@section Scripts {
+    <script>
+        function openRedirect(id) {
+            window.location.href = `/account/patientRecord?id=${id}`;
+        }
+    </script>
+}

@@ -1,0 +1,165 @@
+﻿@using BELibrary.Entity
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var query = ViewBag.QueryData ?? "";
+
+    var faculties = (List<Faculty>)ViewBag.Faculties ?? new List<Faculty>();
+    var facultiesSelected = (List<Guid>)ViewBag.FacultiesSelected ?? new List<Guid>();
+    var genders = (List<bool>)ViewBag.Genders ?? new List<bool>();
+}
+@model PagedList.IPagedList<Doctor>
+
+<div class="breadcrumb-bar">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-8 col-12">
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Search</li>
+                    </ol>
+                </nav>
+                <h2 class="breadcrumb-title"> @(ViewBag.Total ?? 0)  matches found for : @query</h2>
+            </div>
+            <div class="col-md-4 col-12 d-md-block d-none">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
+
+                <div class="card search-filter">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Search Filter</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="/doctor/search" method="post">
+
+                            <div class="filter-widget">
+                                <div class="filter-widget">
+                                    <div class="">
+                                        <input type="text" class="form-control" placeholder="Nhập từ khóa" name="query" value="@query">
+                                    </div>
+                                </div>
+                                <h4>Gender</h4>
+                                <div>
+                                    <label class="custom_check">
+                                        <input type="checkbox" name="genders" value="true" @(genders.Any(x => x) ? "checked" : "")>
+                                        <span class="checkmark"></span> Nam
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="custom_check">
+                                        <input type="checkbox" name="genders" value="false" @(genders.Any(x => !x) ? "checked" : "")>
+                                        <span class="checkmark"></span> Nữ
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="filter-widget" style="    height: 200px;
+                                                              overflow-y: scroll;">
+                                <h4>Select Faculties</h4>
+                                @foreach (var item in faculties)
+                                {
+                                    <div>
+                                        <label class="custom_check">
+                                            <input type="checkbox" name="facultiesSelected" value="@item.Id" @(facultiesSelected.Any(x => x == item.Id) ? "checked" : "")>
+                                            <span class="checkmark"></span> @item.Name
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            <div class="btn-search">
+                                <button type="submit" class="btn btn-block">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-8 col-xl-9">
+
+                @foreach (var doctor in Model)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="doctor-widget">
+                                <div class="doc-info-left">
+                                    <div class="doctor-img">
+                                        <a href="/doctor/detail?id=@doctor.Id">
+                                            <img src="@doctor.Avatar" class="img-fluid" alt="User Image">
+                                        </a>
+                                    </div>
+                                    <div class="doc-info-cont">
+                                        <h4 class="doc-name"><a href="/doctor/detail?id=@doctor.Id">@doctor.Name</a></h4>
+                                        <p class="doc-speciality"> @doctor.Descriptions</p>
+                                        <h5 class="doc-department"> @doctor.Faculty.Name</h5>
+                                        <div class="rating">
+                                            <i class="fas fa-star filled"></i>
+                                            <i class="fas fa-star filled"></i>
+                                            <i class="fas fa-star filled"></i>
+                                            <i class="fas fa-star filled"></i>
+                                            <i class="fas fa-star"></i>
+                                            <span class="d-inline-block average-rating">(17)</span>
+                                        </div>
+                                        <div class="clinic-details">
+                                            <p class="doc-location"><i class="fas fa-map-marker-alt"></i>  @doctor.Address</p>
+                                            <ul class="clinic-gallery">
+                                                <li>
+                                                    <a href="~/Content/theme/img/features/feature-01.jpg" data-fancybox="gallery">
+                                                        <img src="~/Content/theme/img/features/feature-01.jpg" alt="Feature">
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Content/theme/img/features/feature-02.jpg" data-fancybox="gallery">
+                                                        <img src="~/Content/theme/img/features/feature-02.jpg" alt="Feature">
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Content/theme/img/features/feature-03.jpg" data-fancybox="gallery">
+                                                        <img src="~/Content/theme/img/features/feature-03.jpg" alt="Feature">
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Content/theme/img/features/feature-04.jpg" data-fancybox="gallery">
+                                                        <img src="~/Content/theme/img/features/feature-04.jpg" alt="Feature">
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="clinic-services">
+                                            <span>Dental Fillings</span>
+                                            <span> Whitneing</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="doc-info-right">
+                                    <div class="clini-infos">
+                                        <ul>
+                                            <li><i class="far fa-thumbs-up"></i> 98%</li>
+                                            <li><i class="far fa-comment"></i> 17 Feedback</li>
+                                            <li><i class="fas fa-map-marker-alt"></i> @doctor.Address</li>
+                                            <li><i class="fas fa-@(doctor.Gender?"mars":"venus")"></i> @(doctor.Gender?"Nam":"Nữ") </li>
+                                        </ul>
+                                    </div>
+                                    <div class="clinic-booking">
+                                        <a class="view-pro-btn" href="/doctor/detail?id=@doctor.Id">View Profile</a>
+                                        <a class="apt-btn" href="javascript:void(0)" onclick="bookNow('@doctor.Id')">Book Appointment</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="load-more text-center">
+                    <a class="btn btn-primary btn-sm" href="javascript:void(0);">Load More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
